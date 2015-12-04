@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <group android:checkableBehavior="none">
+
+
+        <item
+            android:id="@+id/menu_kirimharga"
+            android:icon="@drawable/ic_action_kirimhargadrawer"
+            android:title="@string/ic_teks_menu_kirimharga"/>
+
+        <item
+            android:id="@+id/menu_jual_komoditas"
+            android:icon="@drawable/ic_action_jualkomoditas"
+            android:title="@string/ic_teks_menu_jualkomoditas"/>
+
+
+        <item
+            android:id="@+id/menu_riwayatlaporan"
+            android:icon="@drawable/ic_action_riwayatlaporan"
+            android:title="@string/ic_teks_menu_riwayatlaporan"/>
+
+        <item
+            android:id="@+id/menu_data_pengguna"
+            android:icon="@drawable/ic_action_datapengguna"
+            android:title="@string/ic_teks_menu_datapengguna"/>
+
+
+        <item
+            android:id="@+id/ic_tentang_app"
+            android:icon="@drawable/ic_action_tentangapl"
+            android:title="@string/ic_teks_menu_tentangapp"/>
+
+    </group>
+
+
+</menu>
