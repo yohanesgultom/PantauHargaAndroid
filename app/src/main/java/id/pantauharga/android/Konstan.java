@@ -34,7 +34,7 @@ public class Konstan {
     public static final String TAG_INTENT_ARRAYKOMODITAS = "arraykomods";
     public static final String TAG_INTENT_POSISIPILIH = "posisipilihan";
     public static final String TAG_INTENT_POSISIURUTANPILIH = "urutanpilihan";
-
+    public static final int KODE_KIRIMHARGAPESANKOMO_AKT = 679;
     public static final String TAG_INTENT_NAMALENGKAP = "namalengkap";
     public static final String TAG_INTENT_USERNAME = "username";
     public static final String TAG_INTENT_PASSWORD = "password";

@@ -9,7 +9,11 @@
     <string name="action_hapusriwayatsemua">Hapus Semua Riwayat</string>
     <string name="action_hapusriwayatini">Hapus riwayat ini</string>
 
-
+    <!--KIRIM PESANAN KOMODITAS -->
+    <string name="lapor_keteranganpesan">Pesan Komoditas pangan dengan mengisi data berikut dengan benar</string>
+    <string name="lapor_kirimdatapesan">PESAN KOMODITAS</string>
+    <string name="lapor_okkirimdatapesan">Data transaksi pembelian anda telah dikirim</string>
+    <string name="ic_teks_menu_belikomoditas">Pesan Komoditas</string>
     <!-- MENU APLIKASI -->
     <string name="ic_teks_menu_kirimharga">Kirim Harga</string>
     <string name="ic_teks_menu_jualkomoditas">Jual Komoditas</string>

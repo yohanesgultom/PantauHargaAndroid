@@ -470,6 +470,16 @@ public class MenuUtama extends BaseActivityLocation {
 
                     break;
 
+                case R.id.menu_beli_komoditas:
+                    if(isLogin) {
+                        Intent intentpesankomoditas = new Intent(MenuUtama.this, PesanKomoditas.class);
+                        intentpesankomoditas.putExtra(Konstan.TAG_INTENT_STATKIRIMHARGA, Konstan.KODE_KIRIMHARGAPESANKOMO_AKT);
+                        MenuUtama.this.startActivity(intentpesankomoditas);
+                    } else {
+                        tampilDialogLoginDulu();
+                    }
+                    break;
+
                 case R.id.menu_riwayatlaporan:
 
                     Intent intentriwatat = new Intent(MenuUtama.this, LaporRiwayat.class);
