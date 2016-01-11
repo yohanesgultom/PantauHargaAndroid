@@ -859,7 +859,7 @@ public class PesanKomoditas extends BaseActivityLocation {
     }
 
 
-    //SET DIALOG OK TERKIRIM
+    //SET DIALOG OK TERKIRIM OK
     public void setOkTerkirim() {
         PesanKomoditas.this.finish();
     }

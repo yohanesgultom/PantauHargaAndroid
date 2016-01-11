@@ -173,7 +173,7 @@ public class LaporHarga extends BaseActivityLocation {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_laporharga);
         ButterKnife.bind(LaporHarga.this);
-        munculMenuAction(LaporHarga.this);
+        munculMenuAction(LaporHarga.this) ;
 
         Bundle bundle = LaporHarga.this.getIntent().getExtras();
         kode_kirimKomoditas = bundle.getInt(Konstan.TAG_INTENT_STATKIRIMHARGA);
