@@ -14,7 +14,10 @@
             android:id="@+id/menu_jual_komoditas"
             android:icon="@drawable/ic_action_jualkomoditas"
             android:title="@string/ic_teks_menu_jualkomoditas"/>
-
+        <item
+            android:id="@+id/menu_beli_komoditas"
+            android:icon="@drawable/ic_action_belikomoditas"
+            android:title="@string/ic_teks_menu_belikomoditas"/>
 
         <item
             android:id="@+id/menu_riwayatlaporan"

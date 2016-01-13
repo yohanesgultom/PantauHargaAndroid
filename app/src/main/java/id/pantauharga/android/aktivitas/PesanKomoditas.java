@@ -44,15 +44,12 @@ import bolts.Task;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
-import io.realm.Realm;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 import id.pantauharga.android.Konstan;
 import id.pantauharga.android.R;
 import id.pantauharga.android.databases.RMDataRiwayat;
 import id.pantauharga.android.databases.RMJsonData;
 import id.pantauharga.android.databases.RMLogin;
-import id.pantauharga.android.dialogs.DialogOkKirim;
+import id.pantauharga.android.dialogs.DialogOkKirimPesanKomoditas;
 import id.pantauharga.android.internets.Apis;
 import id.pantauharga.android.internets.JacksonRequest;
 import id.pantauharga.android.internets.Volleys;
@@ -61,12 +58,15 @@ import id.pantauharga.android.modelgson.HargaKomoditasLapor;
 import id.pantauharga.android.modelgson.KomoditasItem;
 import id.pantauharga.android.modelgsonkirim.HargaKomoditasKirim;
 import id.pantauharga.android.parsers.Parseran;
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 /**
- * Created by Gulajava Ministudio on 11/10/15.
+ * Created by Toshiba on 08/01/2016.
  */
-public class LaporHarga extends BaseActivityLocation {
 
+public class PesanKomoditas extends BaseActivityLocation {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -171,24 +171,24 @@ public class LaporHarga extends BaseActivityLocation {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_laporharga);
-        ButterKnife.bind(LaporHarga.this);
-        munculMenuAction(LaporHarga.this) ;
+        setContentView(R.layout.layout_pesankomoditas);
+        ButterKnife.bind(PesanKomoditas.this);
+        munculMenuAction(PesanKomoditas.this);
 
-        Bundle bundle = LaporHarga.this.getIntent().getExtras();
+        Bundle bundle = PesanKomoditas.this.getIntent().getExtras();
         kode_kirimKomoditas = bundle.getInt(Konstan.TAG_INTENT_STATKIRIMHARGA);
 
         if (toolbar != null) {
-            LaporHarga.this.setSupportActionBar(toolbar);
+            PesanKomoditas.this.setSupportActionBar(toolbar);
         }
 
-        aksibar = LaporHarga.this.getSupportActionBar();
+        aksibar = PesanKomoditas.this.getSupportActionBar();
         assert aksibar != null;
         aksibar.setDisplayHomeAsUpEnabled(true);
-        aksibar.setTitle(R.string.lapor_hargajudul);
+        aksibar.setTitle(R.string.lapor_kirimdatapesan);
 
-        mRealm = Realm.getInstance(LaporHarga.this);
-        mParseran = new Parseran(LaporHarga.this);
+        mRealm = Realm.getInstance(PesanKomoditas.this);
+        mParseran = new Parseran(PesanKomoditas.this);
 
         isAktJalan = true;
 
@@ -205,7 +205,6 @@ public class LaporHarga extends BaseActivityLocation {
         //cek permisi lokasi tapi dengan jeda dulu
         Handler handler = new Handler();
         handler.postDelayed(jedamuatawal, 500);
-
     }
 
 
@@ -213,8 +212,8 @@ public class LaporHarga extends BaseActivityLocation {
     protected void onResume() {
         super.onResume();
 
-        if (!EventBus.getDefault().isRegistered(LaporHarga.this)) {
-            EventBus.getDefault().register(LaporHarga.this);
+        if (!EventBus.getDefault().isRegistered(PesanKomoditas.this)) {
+            EventBus.getDefault().register(PesanKomoditas.this);
         }
     }
 
@@ -223,8 +222,8 @@ public class LaporHarga extends BaseActivityLocation {
     protected void onPause() {
         super.onPause();
 
-        if (EventBus.getDefault().isRegistered(LaporHarga.this)) {
-            EventBus.getDefault().unregister(LaporHarga.this);
+        if (EventBus.getDefault().isRegistered(PesanKomoditas.this)) {
+            EventBus.getDefault().unregister(PesanKomoditas.this);
         }
     }
 
@@ -236,8 +235,8 @@ public class LaporHarga extends BaseActivityLocation {
 
         hentikanListenerLokasi();
 
-        Volleys.getInstance(LaporHarga.this).cancelPendingRequestsNoTag();
-        Volleys.getInstance(LaporHarga.this).clearVolleyCache();
+        Volleys.getInstance(PesanKomoditas.this).cancelPendingRequestsNoTag();
+        Volleys.getInstance(PesanKomoditas.this).clearVolleyCache();
     }
 
 
@@ -253,7 +252,7 @@ public class LaporHarga extends BaseActivityLocation {
 
             case android.R.id.home:
 
-                LaporHarga.this.finish();
+                PesanKomoditas.this.finish();
                 return true;
         }
 
@@ -347,7 +346,7 @@ public class LaporHarga extends BaseActivityLocation {
     //TAMPILKAN KE SPINNER
     private void tampilSpinnerList() {
 
-        mAdapterSpin = new ArrayAdapter<>(LaporHarga.this, android.R.layout.simple_spinner_item, mStringListNamaKomoditas);
+        mAdapterSpin = new ArrayAdapter<>(PesanKomoditas.this, android.R.layout.simple_spinner_item, mStringListNamaKomoditas);
         mAdapterSpin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinkomoditas.setAdapter(mAdapterSpin);
         spinkomoditas.setOnItemSelectedListener(listenerspinner);
@@ -386,8 +385,8 @@ public class LaporHarga extends BaseActivityLocation {
     //AMBIL LOKASI AWAL PENGGUNA
     private void ambilLokasiPenggunaAwal() {
 
-        LaporHarga.this.latitudepengguna = getLatitudesaya();
-        LaporHarga.this.longitudepengguna = getLongitudesaya();
+        PesanKomoditas.this.latitudepengguna = getLatitudesaya();
+        PesanKomoditas.this.longitudepengguna = getLongitudesaya();
 
         isInternet = isInternet();
         mLocationPengguna = getLokasisaya();
@@ -410,8 +409,8 @@ public class LaporHarga extends BaseActivityLocation {
 
         //jika lokasi tidak disetel dengan peta, update lokasi pengguna
         if (!isLokasiSetels) {
-            LaporHarga.this.latitudepengguna = getLatitudesaya();
-            LaporHarga.this.longitudepengguna = getLongitudesaya();
+            PesanKomoditas.this.latitudepengguna = getLatitudesaya();
+            PesanKomoditas.this.longitudepengguna = getLongitudesaya();
             mLocationPengguna = getLokasisaya();
 
             //setel ke edit text lokasi
@@ -433,13 +432,13 @@ public class LaporHarga extends BaseActivityLocation {
     //SUNTING LOKASI DENGAN PETA
     private void setelLokasiPeta() {
 
-        Intent intentkordinat = new Intent(LaporHarga.this, PetaAmbilLokasi.class);
+        Intent intentkordinat = new Intent(PesanKomoditas.this, PetaAmbilLokasi.class);
         intentkordinat.putExtra(Konstan.TAG_INTENT_EDIT_KIRIM, statusKirim);
         intentkordinat.putExtra(Konstan.TAG_INTENT_EDIT_DRAFTKIRIM, true);
         intentkordinat.putExtra(Konstan.TAG_INTENT_LATEDIT, latitudepengguna + "");
         intentkordinat.putExtra(Konstan.TAG_INTENT_LONGEDIT, longitudepengguna + "");
 
-        LaporHarga.this.startActivityForResult(intentkordinat, Konstan.KODE_REQUEST_LOKASI);
+        PesanKomoditas.this.startActivityForResult(intentkordinat, Konstan.KODE_REQUEST_LOKASI);
     }
 
 
@@ -480,8 +479,8 @@ public class LaporHarga extends BaseActivityLocation {
 
                     isLokasiSetels = true;
 
-                    LaporHarga.this.latitudepengguna = dolatsetel;
-                    LaporHarga.this.longitudepengguna = dolongisetel;
+                    PesanKomoditas.this.latitudepengguna = dolatsetel;
+                    PesanKomoditas.this.longitudepengguna = dolongisetel;
 
                     setelEditTextLokasi(latitudepengguna + " , " + longitudepengguna);
 
@@ -607,7 +606,7 @@ public class LaporHarga extends BaseActivityLocation {
 
                         //kirim ke server
                         kirimDataServer(hasiljsons);
-
+                        Log.d("sukses","kirimDataServer");
                         return null;
                     }
                 }, Task.UI_THREAD_EXECUTOR);
@@ -617,7 +616,7 @@ public class LaporHarga extends BaseActivityLocation {
     //KIRIM DATA KE SERVER
     private void kirimDataServer(String jsonbody) {
 
-        String urls = Apis.getLinkLaporHargaKomoditas();
+        String urls = Apis.getLinkPesanKomoditas();
         Map<String, String> headers = new HashMap<>();
         Map<String, String> parameters = new HashMap<>();
 
@@ -649,7 +648,7 @@ public class LaporHarga extends BaseActivityLocation {
                 }
         );
 
-        Volleys.getInstance(LaporHarga.this).addToRequestQueue(jacksonRequest);
+        Volleys.getInstance(PesanKomoditas.this).addToRequestQueue(jacksonRequest);
     }
 
 
@@ -720,8 +719,8 @@ public class LaporHarga extends BaseActivityLocation {
             //tampil dialog data telah dikirim
             tampilDialogBerhasil();
         } else {
-            Toast.makeText(LaporHarga.this, R.string.lapor_okkirimdraft, Toast.LENGTH_SHORT).show();
-            LaporHarga.this.finish();
+            Toast.makeText(PesanKomoditas.this, R.string.lapor_okkirimdraft, Toast.LENGTH_SHORT).show();
+            PesanKomoditas.this.finish();
         }
 
     }
@@ -730,7 +729,7 @@ public class LaporHarga extends BaseActivityLocation {
     //AMBIL GEOCODER LOKASI
     private void ambilGeocoderPengguna(String latitude, String longitude) {
 
-        geocoderPengguna = new Geocoder(LaporHarga.this, Locale.getDefault());
+        geocoderPengguna = new Geocoder(PesanKomoditas.this, Locale.getDefault());
         double dolatitu = 0;
         double dolongi = 0;
 
@@ -828,7 +827,7 @@ public class LaporHarga extends BaseActivityLocation {
     //TAMPILKAN PROGRESS DIALOG
     private void tampilProgressDialog(String pesan) {
 
-        mProgressDialog = new ProgressDialog(LaporHarga.this);
+        mProgressDialog = new ProgressDialog(PesanKomoditas.this);
         mProgressDialog.setMessage(pesan);
         mProgressDialog.setCancelable(true);
         mProgressDialog.setOnCancelListener(listenerprogresbatal);
@@ -843,7 +842,7 @@ public class LaporHarga extends BaseActivityLocation {
         public void onCancel(DialogInterface dialogInterface) {
 
             isProsesKirim = false;
-            Volleys.getInstance(LaporHarga.this).cancelPendingRequestsNoTag();
+            Volleys.getInstance(PesanKomoditas.this).cancelPendingRequestsNoTag();
         }
     };
 
@@ -851,18 +850,18 @@ public class LaporHarga extends BaseActivityLocation {
     //TAMPIL DIALOG BERHASIL
     private void tampilDialogBerhasil() {
 
-        DialogOkKirim dialogOkKirim = new DialogOkKirim();
-        dialogOkKirim.setCancelable(false);
+        DialogOkKirimPesanKomoditas dialogOkKirimPesanKomoditas = new DialogOkKirimPesanKomoditas();
+        dialogOkKirimPesanKomoditas.setCancelable(false);
 
-        FragmentTransaction fts = LaporHarga.this.getSupportFragmentManager().beginTransaction();
-        dialogOkKirim.show(fts, "dialog ok kirim");
+        FragmentTransaction fts = PesanKomoditas.this.getSupportFragmentManager().beginTransaction();
+        dialogOkKirimPesanKomoditas.show(fts, "dialog ok kirim");
 
     }
 
 
-    //SET DIALOG OK TERKIRIM
+    //SET DIALOG OK TERKIRIM OK
     public void setOkTerkirim() {
-        LaporHarga.this.finish();
+        PesanKomoditas.this.finish();
     }
 
     //LISTENER SPINNER
@@ -886,7 +885,7 @@ public class LaporHarga extends BaseActivityLocation {
         @Override
         public void onClick(View view) {
 
-            sembunyikeyboard(LaporHarga.this, view);
+            sembunyikeyboard(PesanKomoditas.this, view);
             switch (view.getId()) {
 
                 case R.id.tombol_setelpeta:
@@ -894,7 +893,7 @@ public class LaporHarga extends BaseActivityLocation {
                     if (mLocationPengguna != null) {
                         setelLokasiPeta();
                     } else {
-                        Toast.makeText(LaporHarga.this, R.string.toast_gagalokasisetelpeta, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PesanKomoditas.this, R.string.toast_gagalokasisetelpeta, Toast.LENGTH_SHORT).show();
                     }
                     break;
 
@@ -916,7 +915,7 @@ public class LaporHarga extends BaseActivityLocation {
     private void munculSnackbar(int resPesan) {
 
         Snackbar.make(toolbar, resPesan, Snackbar.LENGTH_LONG).setAction("OK", listenersnackbar)
-                .setActionTextColor(LaporHarga.this.getResources().getColor(R.color.kuning_indikator)).show();
+                .setActionTextColor(PesanKomoditas.this.getResources().getColor(R.color.kuning_indikator)).show();
     }
 
     View.OnClickListener listenersnackbar = new View.OnClickListener() {

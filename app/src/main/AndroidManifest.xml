@@ -83,7 +83,16 @@
                 <category android:name="android.intent.category.NOLAUNCHER"/>
             </intent-filter>
         </activity>
-
+        <activity
+            android:name="id.pantauharga.android.aktivitas.PesanKomoditas"
+            android:label="@string/ic_teks_menu_belikomoditas"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.NOLAUNCHER"/>
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="id.pantauharga.android.aktivitas.PetaAmbilLokasi"
