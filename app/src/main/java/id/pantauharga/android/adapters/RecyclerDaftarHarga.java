@@ -71,9 +71,11 @@ public class RecyclerDaftarHarga extends RecyclerView.Adapter<RecyclerDaftarHarg
         int type = hargaKomoItem.getType();
         String nama2 = "";
         if(type == 2) {
-            nama2 = namakomoditas+"(pesan)";
-        }else{
-            nama2 = namakomoditas+"(jual)";
+            nama2 = namakomoditas+"(Beli)";
+        }else if(type == 1){
+            nama2 = namakomoditas+"(Jual)";
+        } else{
+            nama2 = namakomoditas+"(Pantau)";
         }
 
         //ambil harga
