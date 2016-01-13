@@ -110,6 +110,7 @@ public class FragmentPetaHarga extends Fragment {
 
     private String init_namakomoditas = "";
     private int init_hargakomoditas = 0;
+    private int init_type = 0;
     private String str_formathargakomoditas = "0";
     private String init_alamatkomoditas = "";
     private String init_telponkomoditas = "";
@@ -376,8 +377,15 @@ public class FragmentPetaHarga extends Fragment {
             init_telponkomoditas = itemloks.getNohp();
             init_latitudekomoditas = itemloks.getLatitude();
             init_longitudekomoditas = itemloks.getLongitude();
+            init_type = itemloks.getType();
+            String namakomoditastype = "";
+            if(init_type == 2){
+                namakomoditastype = init_namakomoditas+"(pesan)";
+            } else {
+                namakomoditastype = init_namakomoditas+"(jual)";
+            }
 
-            teks_namakomoditas.setText(init_namakomoditas);
+            teks_namakomoditas.setText(namakomoditastype);
 
             str_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(init_hargakomoditas) + ",-";
             teks_hargakomoditas.setText(str_formathargakomoditas);
@@ -453,8 +461,15 @@ public class FragmentPetaHarga extends Fragment {
             init_telponkomoditas = itemloks.getNohp();
             init_latitudekomoditas = itemloks.getLatitude();
             init_longitudekomoditas = itemloks.getLongitude();
+            init_type = itemloks.getType();
+            String namakomoditastype = "";
+            if(init_type == 2){
+                namakomoditastype = init_namakomoditas+"(pesan)";
+            } else {
+                namakomoditastype = init_namakomoditas+"(jual)";
+            }
 
-            teks_namakomoditas.setText(init_namakomoditas);
+            teks_namakomoditas.setText(namakomoditastype);
 
             str_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(init_hargakomoditas) + ",-";
             teks_hargakomoditas.setText(str_formathargakomoditas);
@@ -540,9 +555,16 @@ public class FragmentPetaHarga extends Fragment {
                 String marklik_telponkomoditas = hargamarkerklik.getNohp();
                 latpeta = hargamarkerklik.getLatitude();
                 longipeta = hargamarkerklik.getLongitude();
+                int marklik_type = hargamarkerklik.getType();
+                String namakomoditastype = "";
+                if(marklik_type == 2){
+                    namakomoditastype = marklik_namakomoditas+"(pesan)";
+                }else{
+                    namakomoditastype = marklik_namakomoditas+"(jual)";
+                }
 
 
-                teks_namakomoditas.setText(marklik_namakomoditas);
+                teks_namakomoditas.setText(namakomoditastype);
 
                 String markerklik_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(marklik_hargakomoditas) + ",-";
                 teks_hargakomoditas.setText(markerklik_formathargakomoditas);
