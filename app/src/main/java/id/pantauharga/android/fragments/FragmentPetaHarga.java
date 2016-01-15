@@ -110,6 +110,7 @@ public class FragmentPetaHarga extends Fragment {
 
     private String init_namakomoditas = "";
     private int init_hargakomoditas = 0;
+    private int init_type = 0;
     private String str_formathargakomoditas = "0";
     private String init_alamatkomoditas = "";
     private String init_telponkomoditas = "";
@@ -364,7 +365,7 @@ public class FragmentPetaHarga extends Fragment {
             hashmapListHarga = new HashMap<>();
 
             String loops_namakomoditas = "";
-
+            int loops_type = 0;
             map.clear();
             setelPosisiSayaAwal();
 
@@ -376,8 +377,17 @@ public class FragmentPetaHarga extends Fragment {
             init_telponkomoditas = itemloks.getNohp();
             init_latitudekomoditas = itemloks.getLatitude();
             init_longitudekomoditas = itemloks.getLongitude();
+            init_type = itemloks.getType();
+            String namakomoditastype = "";
+            if(init_type == 2){
+                namakomoditastype = init_namakomoditas+"(Beli)";
+            } else if(init_type == 1) {
+                namakomoditastype = init_namakomoditas+"(Jual)";
+            } else {
+                namakomoditastype = init_namakomoditas+"(Pantau)";
+            }
 
-            teks_namakomoditas.setText(init_namakomoditas);
+            teks_namakomoditas.setText(namakomoditastype);
 
             str_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(init_hargakomoditas) + ",-";
             teks_hargakomoditas.setText(str_formathargakomoditas);
@@ -401,8 +411,23 @@ public class FragmentPetaHarga extends Fragment {
             for (int i = 0; i < panjangarray; i++) {
 
                 lokitem = mListKomoHargaKomparator.get(i);
-
                 loops_namakomoditas = lokitem.getBarang();
+                loops_type = lokitem.getType();
+                String namakomo ="";
+                int icon = 0 ;
+                if (loops_type == 2){
+                    namakomo = loops_namakomoditas+"(B)";
+                    icon =R.drawable.ic_buy;
+                }
+                else if (loops_type == 1) {
+                    namakomo = loops_namakomoditas+"(J)";
+                    icon =R.drawable.ic_sell;
+                }
+                else {
+                    namakomo = loops_namakomoditas+"(P)";
+                    icon =R.drawable.ic_pantau;
+                }
+
                 dolatitude = Double.valueOf(lokitem.getLatitude());
                 dolongitude = Double.valueOf(lokitem.getLongitude());
 
@@ -410,8 +435,8 @@ public class FragmentPetaHarga extends Fragment {
 
                 MarkerOptions markeropsi = new MarkerOptions();
                 markeropsi.position(latlnglokasi);
-                markeropsi.title(loops_namakomoditas);
-                markeropsi.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pinpetaharga));
+                markeropsi.title(namakomo);
+                markeropsi.icon(BitmapDescriptorFactory.fromResource(icon));
 
                 Marker markeradd = map.addMarker(markeropsi);
 
@@ -441,6 +466,7 @@ public class FragmentPetaHarga extends Fragment {
             Marker markeradd;
 
             String loops_namakomoditas = "";
+            int loops_type = 0;
 
             map.clear();
             setelPosisiSayaAwal();
@@ -453,8 +479,17 @@ public class FragmentPetaHarga extends Fragment {
             init_telponkomoditas = itemloks.getNohp();
             init_latitudekomoditas = itemloks.getLatitude();
             init_longitudekomoditas = itemloks.getLongitude();
+            init_type = itemloks.getType();
+            String namakomoditastype = "";
+            if(init_type == 2){
+                namakomoditastype = init_namakomoditas+"(Beli)";
+            } else if(init_type == 1) {
+                namakomoditastype = init_namakomoditas + "(Jual)";
+            }else {
+                namakomoditastype = init_namakomoditas +"(Pantau)";
+            }
 
-            teks_namakomoditas.setText(init_namakomoditas);
+            teks_namakomoditas.setText(namakomoditastype);
 
             str_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(init_hargakomoditas) + ",-";
             teks_hargakomoditas.setText(str_formathargakomoditas);
@@ -480,6 +515,19 @@ public class FragmentPetaHarga extends Fragment {
                 lokitem = mListKomoHargaKomparator.get(i);
 
                 loops_namakomoditas = lokitem.getBarang();
+                loops_type = lokitem.getType();
+                String namakomo ="";
+                int icon2 =0;
+                if (loops_type == 2){
+                    namakomo = loops_namakomoditas+"(B)";
+                    icon2 =R.drawable.ic_buy;
+                }else if (loops_type == 1) {
+                    namakomo = loops_namakomoditas+"(J)";
+                    icon2 =R.drawable.ic_sell;
+                }else  {
+                    namakomo = loops_namakomoditas+"(P)";
+                    icon2 = R.drawable.ic_pantau;
+                }
                 dolatitude = Double.valueOf(lokitem.getLatitude());
                 dolongitude = Double.valueOf(lokitem.getLongitude());
 
@@ -487,8 +535,8 @@ public class FragmentPetaHarga extends Fragment {
 
                 MarkerOptions markeropsi = new MarkerOptions();
                 markeropsi.position(latlnglokasi);
-                markeropsi.title(loops_namakomoditas);
-                markeropsi.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pinpetaharga));
+                markeropsi.title(namakomo);
+                markeropsi.icon(BitmapDescriptorFactory.fromResource(icon2));
 
 
                 if (posisiklik == i) {
@@ -540,9 +588,16 @@ public class FragmentPetaHarga extends Fragment {
                 String marklik_telponkomoditas = hargamarkerklik.getNohp();
                 latpeta = hargamarkerklik.getLatitude();
                 longipeta = hargamarkerklik.getLongitude();
-
-
-                teks_namakomoditas.setText(marklik_namakomoditas);
+                int marklik_type = hargamarkerklik.getType();
+                String namakomoditastype = "";
+                if(marklik_type == 2){
+                    namakomoditastype = marklik_namakomoditas+"(Beli)";
+                }else if(marklik_type == 1){
+                    namakomoditastype = marklik_namakomoditas+"(Jual)";
+                }else{
+                    namakomoditastype = marklik_namakomoditas+"(Pantau)";
+                }
+                teks_namakomoditas.setText(namakomoditastype);
 
                 String markerklik_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(marklik_hargakomoditas) + ",-";
                 teks_hargakomoditas.setText(markerklik_formathargakomoditas);

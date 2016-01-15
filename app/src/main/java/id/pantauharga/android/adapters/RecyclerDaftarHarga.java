@@ -67,13 +67,24 @@ public class RecyclerDaftarHarga extends RecyclerView.Adapter<RecyclerDaftarHarg
 
         //ambil nama komoditas
         String namakomoditas = hargaKomoItem.getBarang();
+        //ambil type
+        int type = hargaKomoItem.getType();
+        String nama2 = "";
+        if(type == 2) {
+            nama2 = namakomoditas+"(Beli)";
+        }else if(type == 1){
+            nama2 = namakomoditas+"(Jual)";
+        } else{
+            nama2 = namakomoditas+"(Pantau)";
+        }
 
         //ambil harga
         int hargabarang = hargaKomoItem.getPrice();
 
         String hargaketerangantampil = "Rp " + mParseran.formatAngkaPisah(hargabarang) + ",-";
 
-        holder.teks_namakomoditas.setText(namakomoditas);
+
+        holder.teks_namakomoditas.setText(nama2);
         holder.teks_keteranganharga.setText(hargaketerangantampil);
 
         ImageView gambarlist = holder.gambar_list;

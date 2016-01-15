@@ -262,6 +262,7 @@ public class Parseran {
         String longitude = "";
         String nohp = "";
         int price = 0;
+        int type = 0;
 
         float jaraklokasi = 0;
 
@@ -281,7 +282,7 @@ public class Parseran {
                     longitude = hargaKomoditasItem.getLongitude();
                     nohp = hargaKomoditasItem.getNohp();
                     price = hargaKomoditasItem.getPrice();
-
+                    type = hargaKomoditasItem.getType();
                     double dolatitude = Double.valueOf(latitude);
                     double dolongitude = Double.valueOf(longitude);
 
@@ -296,6 +297,7 @@ public class Parseran {
                     hargaKomoditasItemKomparator.setLongitude(longitude);
                     hargaKomoditasItemKomparator.setNohp(nohp);
                     hargaKomoditasItemKomparator.setPrice(price);
+                    hargaKomoditasItemKomparator.setType(type);
                     hargaKomoditasItemKomparator.setJaraklokasi(jaraklokasi + "");
 
                     Log.w("HARGA BARANG SIMPAN ", "" + barang + " " + price);

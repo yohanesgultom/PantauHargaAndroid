@@ -12,6 +12,7 @@ public class HargaKomoditasItemKomparator {
     private String longitude = "";
     private String nohp = "";
     private int price = 0;
+    private  int type = 0;
     private String jaraklokasi = "";
 
     public HargaKomoditasItemKomparator() {
@@ -56,6 +57,15 @@ public class HargaKomoditasItemKomparator {
     public void setPrice(int price) {
         this.price = price;
     }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
 
     public String getJaraklokasi() {
         return jaraklokasi;
