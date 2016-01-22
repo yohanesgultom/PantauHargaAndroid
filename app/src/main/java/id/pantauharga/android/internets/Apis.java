@@ -18,7 +18,7 @@ import id.pantauharga.android.modelgson.Registrasis;
  */
 public class Apis {
 
-    public static int JUMLAH_TIMEOUT = 2500;
+    public static int JUMLAH_TIMEOUT = 10000;
     public static int JUMLAH_COBA = 2;
     public static float PENGALI_TIMEOUT = 1;
 
