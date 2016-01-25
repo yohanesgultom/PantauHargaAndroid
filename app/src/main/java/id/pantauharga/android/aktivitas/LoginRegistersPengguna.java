@@ -18,6 +18,8 @@ import android.view.View;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -500,7 +502,6 @@ public class LoginRegistersPengguna extends AppCompatActivity {
                 new Response.Listener<Registrasis>() {
                     @Override
                     public void onResponse(Registrasis response) {
-
                         Log.w("SUKSES", "SUKSES");
                         if (isAktJalan) {
                             cekHasilRegistrasi(response);
@@ -511,12 +512,19 @@ public class LoginRegistersPengguna extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-                        error.printStackTrace();
-                        Log.w("GAGAL", "GAGAL");
-                        if (isAktJalan) {
-
-                            cekHasilRegistrasi(null);
+                        JSONObject res;
+                        try {
+                            String message = new String(error.networkResponse.data);
+                            res = new JSONObject(message);
+                            Log.w("GAGAL", res.getString("message"));
+                            if (isAktJalan) {
+                                //gagal login
+                                munculSnackbar(res.getString("message"));
+                                isProgresKirim = false;
+                                mProgressDialog.dismiss();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -684,6 +692,12 @@ public class LoginRegistersPengguna extends AppCompatActivity {
 
     //MUNCUL SNACKBAR
     private void munculSnackbar(int resPesan) {
+
+        Snackbar.make(toolbar, resPesan, Snackbar.LENGTH_LONG).setAction("OK", listenersnackbar)
+                .setActionTextColor(LoginRegistersPengguna.this.getResources().getColor(R.color.kuning_indikator)).show();
+    }
+
+    private void munculSnackbar(String resPesan) {
 
         Snackbar.make(toolbar, resPesan, Snackbar.LENGTH_LONG).setAction("OK", listenersnackbar)
                 .setActionTextColor(LoginRegistersPengguna.this.getResources().getColor(R.color.kuning_indikator)).show();
