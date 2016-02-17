@@ -9,6 +9,8 @@ public class HargaKomoditasItem {
     private String latitude = "";
     private String longitude = "";
     private String nohp = "";
+    private String description = "";
+    private String lastUpdated = "";
     private int price = 0;
 
     public HargaKomoditasItem() {
@@ -52,6 +54,22 @@ public class HargaKomoditasItem {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }
 

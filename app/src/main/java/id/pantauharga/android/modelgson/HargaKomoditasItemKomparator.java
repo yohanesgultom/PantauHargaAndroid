@@ -1,6 +1,7 @@
 package id.pantauharga.android.modelgson;
 
 import java.util.Comparator;
+import java.util.Date;
 
 /**
  * Created by Gulajava Ministudio on 11/6/15.
@@ -13,6 +14,8 @@ public class HargaKomoditasItemKomparator {
     private String nohp = "";
     private int price = 0;
     private String jaraklokasi = "";
+    private String description = "";
+    private Date lastUpdated = new Date();
 
     public HargaKomoditasItemKomparator() {
     }
@@ -55,6 +58,22 @@ public class HargaKomoditasItemKomparator {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public String getJaraklokasi() {
