@@ -11,6 +11,8 @@ public class HargaKomoditasItem {
     private String nohp = "";
     private int price = 0;
     private int type = 0 ;
+    private String description = "";
+    private String lastUpdated = "";
     public HargaKomoditasItem() {
     }
 
@@ -53,12 +55,29 @@ public class HargaKomoditasItem {
     public void setPrice(int price) {
         this.price = price;
     }
+
     public int getType() {
         return type;
     }
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }
 

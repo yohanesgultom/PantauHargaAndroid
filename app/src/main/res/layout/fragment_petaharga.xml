@@ -94,6 +94,27 @@
                             android:textColor="@color/warnatekssubjudul"
                             android:textSize="@dimen/ukuran14sp"/>
 
+                        <TextView
+                            android:id="@+id/teks_last_updated"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="Last Updated : "
+                            android:textColor="@color/warnatekssubjudul"
+                            android:textSize="@dimen/ukuran14sp"/>
+
+
+                        <TextView
+                            android:id="@+id/teks_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="Keterangan : "
+                            android:textColor="@color/warnatekssubjudul"
+                            android:textSize="@dimen/ukuran14sp"/>
+
+
+
 
                     </LinearLayout>
 

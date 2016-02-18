@@ -14,7 +14,9 @@ import com.fasterxml.jackson.jr.ob.JSON;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -257,13 +259,6 @@ public class Parseran {
         List<HargaKomoditasItemKomparator> listkomparator = new ArrayList<>();
         HargaKomoditasItemKomparator hargaKomoditasItemKomparator;
 
-        String barang = "";
-        String latitude = "";
-        String longitude = "";
-        String nohp = "";
-        int price = 0;
-        int type = 0;
-
         float jaraklokasi = 0;
 
         Location lokasicekkomoditas = new Location("");
@@ -274,33 +269,30 @@ public class Parseran {
 
             try {
 
-                for (int i = 0; i < panjangarray; i++) {
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
+                String latitude = "";
+                String longitude = "";
 
+                for (int i = 0; i < panjangarray; i++) {
                     HargaKomoditasItem hargaKomoditasItem = hargaKomoditasItemList.get(i);
-                    barang = hargaKomoditasItem.getBarang();
                     latitude = hargaKomoditasItem.getLatitude();
                     longitude = hargaKomoditasItem.getLongitude();
-                    nohp = hargaKomoditasItem.getNohp();
-                    price = hargaKomoditasItem.getPrice();
-                    type = hargaKomoditasItem.getType();
-                    double dolatitude = Double.valueOf(latitude);
-                    double dolongitude = Double.valueOf(longitude);
 
-                    lokasicekkomoditas.setLatitude(dolatitude);
-                    lokasicekkomoditas.setLongitude(dolongitude);
+                    lokasicekkomoditas.setLatitude(Double.valueOf(latitude));
+                    lokasicekkomoditas.setLongitude(Double.valueOf(longitude));
 
                     jaraklokasi = locationSaya.distanceTo(lokasicekkomoditas);
 
                     hargaKomoditasItemKomparator = new HargaKomoditasItemKomparator();
-                    hargaKomoditasItemKomparator.setBarang(barang);
+                    hargaKomoditasItemKomparator.setBarang(hargaKomoditasItem.getBarang());
                     hargaKomoditasItemKomparator.setLatitude(latitude);
                     hargaKomoditasItemKomparator.setLongitude(longitude);
-                    hargaKomoditasItemKomparator.setNohp(nohp);
-                    hargaKomoditasItemKomparator.setPrice(price);
-                    hargaKomoditasItemKomparator.setType(type);
+                    hargaKomoditasItemKomparator.setNohp(hargaKomoditasItem.getNohp());
+                    hargaKomoditasItemKomparator.setPrice(hargaKomoditasItem.getPrice());
                     hargaKomoditasItemKomparator.setJaraklokasi(jaraklokasi + "");
-
-                    Log.w("HARGA BARANG SIMPAN ", "" + barang + " " + price);
+                    hargaKomoditasItemKomparator.setDescription(hargaKomoditasItem.getDescription());
+                    hargaKomoditasItemKomparator.setLastUpdated(df.parse(hargaKomoditasItem.getLastUpdated()));
+                    Log.w("HARGA BARANG SIMPAN ", "" + hargaKomoditasItem.getBarang() + " " + hargaKomoditasItem.getPrice());
 
                     listkomparator.add(hargaKomoditasItemKomparator);
                 }

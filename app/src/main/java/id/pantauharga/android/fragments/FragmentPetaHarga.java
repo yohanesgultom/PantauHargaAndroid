@@ -27,11 +27,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.logging.SimpleFormatter;
 
 import bolts.Continuation;
 import bolts.Task;
@@ -67,6 +70,10 @@ public class FragmentPetaHarga extends Fragment {
     TextView teks_alamatkomoditas;
     @Bind(R.id.teks_nomortelpon)
     TextView teks_telponkomoditas;
+    @Bind(R.id.teks_last_updated)
+    TextView teks_last_updated;
+    @Bind(R.id.teks_description)
+    TextView teks_description;
     @Bind(R.id.tombol_navigasi)
     FloatingActionButton tombolnavigasikan;
 
@@ -116,6 +123,10 @@ public class FragmentPetaHarga extends Fragment {
     private String init_telponkomoditas = "";
     private String init_latitudekomoditas = "0";
     private String init_longitudekomoditas = "0";
+    private Date init_last_updated = new Date();
+    private String init_description = "";
+
+    private SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyy HH:mm");
 
 
     @Nullable
@@ -159,6 +170,48 @@ public class FragmentPetaHarga extends Fragment {
         if (EventBus.getDefault().isRegistered(FragmentPetaHarga.this)) {
             EventBus.getDefault().unregister(FragmentPetaHarga.this);
         }
+    }
+
+    public void displayInfo(HargaKomoditasItemKomparator itemloks) {
+        init_namakomoditas = itemloks.getBarang();
+        init_hargakomoditas = itemloks.getPrice();
+        init_telponkomoditas = itemloks.getNohp();
+        init_latitudekomoditas = itemloks.getLatitude();
+        init_longitudekomoditas = itemloks.getLongitude();
+        init_description = itemloks.getDescription();
+        init_last_updated = itemloks.getLastUpdated();
+        init_type = itemloks.getType();
+        String namakomoditastype = "";
+        if (init_type == 2) {
+            namakomoditastype = init_namakomoditas + "(Beli)";
+        } else if (init_type == 1) {
+            namakomoditastype = init_namakomoditas + "(Jual)";
+        } else {
+            namakomoditastype = init_namakomoditas + "(Pantau)";
+        }
+
+        teks_namakomoditas.setText(namakomoditastype);
+
+        str_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(init_hargakomoditas) + ",-";
+        teks_hargakomoditas.setText(str_formathargakomoditas);
+
+        if (init_telponkomoditas.length() > 4) {
+            String teksets = "Telp : " + init_telponkomoditas;
+            teks_telponkomoditas.setText(teksets);
+            teks_telponkomoditas.setVisibility(View.VISIBLE);
+        } else {
+            String teksets = "Telp : -";
+            teks_telponkomoditas.setText(teksets);
+            teks_telponkomoditas.setVisibility(View.GONE);
+        }
+        if (init_description != null && !init_description.isEmpty()) {
+            teks_description.setText("Keterangan : \n" + init_description);
+            teks_description.setVisibility(View.VISIBLE);
+        } else {
+            teks_description.setText("Keterangan : -");
+            teks_description.setVisibility(View.GONE);
+        }
+        teks_last_updated.setText("Last Updated : " + formatDate.format(init_last_updated));
     }
 
 
@@ -371,37 +424,7 @@ public class FragmentPetaHarga extends Fragment {
 
 
             //ambil data awal untuk inisialisasi keterangan
-            HargaKomoditasItemKomparator itemloks = mListKomoHargaKomparator.get(0);
-            init_namakomoditas = itemloks.getBarang();
-            init_hargakomoditas = itemloks.getPrice();
-            init_telponkomoditas = itemloks.getNohp();
-            init_latitudekomoditas = itemloks.getLatitude();
-            init_longitudekomoditas = itemloks.getLongitude();
-            init_type = itemloks.getType();
-            String namakomoditastype = "";
-            if(init_type == 2){
-                namakomoditastype = init_namakomoditas+"(Beli)";
-            } else if(init_type == 1) {
-                namakomoditastype = init_namakomoditas+"(Jual)";
-            } else {
-                namakomoditastype = init_namakomoditas+"(Pantau)";
-            }
-
-            teks_namakomoditas.setText(namakomoditastype);
-
-            str_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(init_hargakomoditas) + ",-";
-            teks_hargakomoditas.setText(str_formathargakomoditas);
-
-            if (init_telponkomoditas.length() > 4) {
-                String teksets = "Telp : " + init_telponkomoditas;
-                teks_telponkomoditas.setText(teksets);
-                teks_telponkomoditas.setVisibility(View.VISIBLE);
-            } else {
-                String teksets = "Telp : -";
-                teks_telponkomoditas.setText(teksets);
-                teks_telponkomoditas.setVisibility(View.GONE);
-            }
-
+            displayInfo(mListKomoHargaKomparator.get(0));
 
             //task ambil geocoder
             taskAmbilGeocoder(init_latitudekomoditas, init_longitudekomoditas);
@@ -413,19 +436,17 @@ public class FragmentPetaHarga extends Fragment {
                 lokitem = mListKomoHargaKomparator.get(i);
                 loops_namakomoditas = lokitem.getBarang();
                 loops_type = lokitem.getType();
-                String namakomo ="";
-                int icon = 0 ;
-                if (loops_type == 2){
-                    namakomo = loops_namakomoditas+"(B)";
-                    icon =R.drawable.ic_buy;
-                }
-                else if (loops_type == 1) {
-                    namakomo = loops_namakomoditas+"(J)";
-                    icon =R.drawable.ic_sell;
-                }
-                else {
-                    namakomo = loops_namakomoditas+"(P)";
-                    icon =R.drawable.ic_pantau;
+                String namakomo = "";
+                int icon = 0;
+                if (loops_type == 2) {
+                    namakomo = loops_namakomoditas + "(B)";
+                    icon = R.drawable.ic_buy;
+                } else if (loops_type == 1) {
+                    namakomo = loops_namakomoditas + "(J)";
+                    icon = R.drawable.ic_sell;
+                } else {
+                    namakomo = loops_namakomoditas + "(P)";
+                    icon = R.drawable.ic_pantau;
                 }
 
                 dolatitude = Double.valueOf(lokitem.getLatitude());
@@ -473,37 +494,7 @@ public class FragmentPetaHarga extends Fragment {
 
 
             //ambil data awal untuk inisialisasi keterangan
-            HargaKomoditasItemKomparator itemloks = mListKomoHargaKomparator.get(posisiklik);
-            init_namakomoditas = itemloks.getBarang();
-            init_hargakomoditas = itemloks.getPrice();
-            init_telponkomoditas = itemloks.getNohp();
-            init_latitudekomoditas = itemloks.getLatitude();
-            init_longitudekomoditas = itemloks.getLongitude();
-            init_type = itemloks.getType();
-            String namakomoditastype = "";
-            if(init_type == 2){
-                namakomoditastype = init_namakomoditas+"(Beli)";
-            } else if(init_type == 1) {
-                namakomoditastype = init_namakomoditas + "(Jual)";
-            }else {
-                namakomoditastype = init_namakomoditas +"(Pantau)";
-            }
-
-            teks_namakomoditas.setText(namakomoditastype);
-
-            str_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(init_hargakomoditas) + ",-";
-            teks_hargakomoditas.setText(str_formathargakomoditas);
-
-            if (init_telponkomoditas.length() > 4) {
-                String teksets = "Telp : " + init_telponkomoditas;
-                teks_telponkomoditas.setText(teksets);
-                teks_telponkomoditas.setVisibility(View.VISIBLE);
-            } else {
-                String teksets = "Telp : -";
-                teks_telponkomoditas.setText(teksets);
-                teks_telponkomoditas.setVisibility(View.GONE);
-            }
-
+            displayInfo(mListKomoHargaKomparator.get(posisiklik));
 
             //task ambil geocoder
             taskAmbilGeocoder(init_latitudekomoditas, init_longitudekomoditas);
@@ -516,16 +507,16 @@ public class FragmentPetaHarga extends Fragment {
 
                 loops_namakomoditas = lokitem.getBarang();
                 loops_type = lokitem.getType();
-                String namakomo ="";
-                int icon2 =0;
-                if (loops_type == 2){
-                    namakomo = loops_namakomoditas+"(B)";
-                    icon2 =R.drawable.ic_buy;
-                }else if (loops_type == 1) {
-                    namakomo = loops_namakomoditas+"(J)";
-                    icon2 =R.drawable.ic_sell;
-                }else  {
-                    namakomo = loops_namakomoditas+"(P)";
+                String namakomo = "";
+                int icon2 = 0;
+                if (loops_type == 2) {
+                    namakomo = loops_namakomoditas + "(B)";
+                    icon2 = R.drawable.ic_buy;
+                } else if (loops_type == 1) {
+                    namakomo = loops_namakomoditas + "(J)";
+                    icon2 = R.drawable.ic_sell;
+                } else {
+                    namakomo = loops_namakomoditas + "(P)";
                     icon2 = R.drawable.ic_pantau;
                 }
                 dolatitude = Double.valueOf(lokitem.getLatitude());
@@ -580,38 +571,7 @@ public class FragmentPetaHarga extends Fragment {
 
             //tampilkan keterangan marker
             try {
-
-                HargaKomoditasItemKomparator hargamarkerklik = hashmapListHarga.get(marker);
-
-                String marklik_namakomoditas = hargamarkerklik.getBarang();
-                int marklik_hargakomoditas = hargamarkerklik.getPrice();
-                String marklik_telponkomoditas = hargamarkerklik.getNohp();
-                latpeta = hargamarkerklik.getLatitude();
-                longipeta = hargamarkerklik.getLongitude();
-                int marklik_type = hargamarkerklik.getType();
-                String namakomoditastype = "";
-                if(marklik_type == 2){
-                    namakomoditastype = marklik_namakomoditas+"(Beli)";
-                }else if(marklik_type == 1){
-                    namakomoditastype = marklik_namakomoditas+"(Jual)";
-                }else{
-                    namakomoditastype = marklik_namakomoditas+"(Pantau)";
-                }
-                teks_namakomoditas.setText(namakomoditastype);
-
-                String markerklik_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(marklik_hargakomoditas) + ",-";
-                teks_hargakomoditas.setText(markerklik_formathargakomoditas);
-
-                if (marklik_telponkomoditas.length() > 4) {
-                    String teksets = "Telp : " + marklik_telponkomoditas;
-                    teks_telponkomoditas.setText(teksets);
-                    teks_telponkomoditas.setVisibility(View.VISIBLE);
-                } else {
-                    String teksets = "Telp : -";
-                    teks_telponkomoditas.setText(teksets);
-                    teks_telponkomoditas.setVisibility(View.GONE);
-                }
-
+                displayInfo(hashmapListHarga.get(marker));
 
                 //task ambil geocoder
                 taskAmbilGeocoder(latpeta, longipeta);
