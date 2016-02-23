@@ -11,6 +11,7 @@ public class HargaKomoditasLapor {
     private String lng = "";
     private String nohp = "";
     private String quantity = "";
+    private  String keterangan ="";
 
     public HargaKomoditasLapor() {
     }
@@ -47,6 +48,14 @@ public class HargaKomoditasLapor {
         this.lng = lng;
     }
 
+    public String getKeterangan() {
+        return keterangan;
+    }
+
+    public void setKeterangan(String keterangan) {
+        this.keterangan = keterangan;
+    }
+
     public String getNohp() {
         return nohp;
     }
@@ -55,6 +64,7 @@ public class HargaKomoditasLapor {
         this.nohp = nohp;
     }
 
+
     public String getQuantity() {
         return quantity;
     }
@@ -62,4 +72,6 @@ public class HargaKomoditasLapor {
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
+
+
 }

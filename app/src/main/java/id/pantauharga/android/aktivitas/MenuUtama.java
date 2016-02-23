@@ -479,6 +479,12 @@ public class MenuUtama extends BaseActivityLocation {
                         tampilDialogLoginDulu();
                     }
                     break;
+//                case R.id.scan_code:
+//
+//                    Intent scan_code = new Intent(MenuUtama.this, Scan_qr.class);
+//                    scan_code.putExtra(Konstan.TAG_INTENT_STATKIRIMHARGA, Konstan.KODE_KIRIMHARGAPESANKOMO_AKT);
+//                    MenuUtama.this.startActivity(scan_code);
+//                    break;
 
                 case R.id.menu_riwayatlaporan:
 

@@ -7,8 +7,8 @@ public class Konstan {
 
     //-6.91360343 107.60232925
 
-    public static final String ALAMATSERVER = "http://pantauharga.id";
-
+    //public static final String ALAMATSERVER = "http://pantauharga.id";
+    public static final String ALAMATSERVER = "http://192.168.43.46:8080/PantauHarga";
     public static final String NAMAJSONASET_KOMODITAS = "komoditas.json";
 
     public static final long TAG_SATUJAM = 3600000;

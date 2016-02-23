@@ -10,7 +10,7 @@
     <string name="action_hapusriwayatini">Hapus riwayat ini</string>
 
     <!--KIRIM PESANAN KOMODITAS -->
-    <string name="lapor_keteranganpesan">Pesan Komoditas pangan dengan mengisi data berikut dengan benar</string>
+    <string name="lapor_keteranganpesan">Pesan Komoditas pangan dengan mengisi data berikut dengan benar dan isi keterangan tambahan</string>
     <string name="lapor_kirimdatapesan">PESAN KOMODITAS</string>
     <string name="lapor_okkirimdatapesan">Data transaksi pembelian anda telah dikirim</string>
     <string name="ic_teks_menu_belikomoditas">Pesan Komoditas</string>
@@ -108,13 +108,17 @@
 
     <!-- KIRIM LAPORAN HARGA BARANG -->
     <string name="lapor_hargajudul">Lapor Harga</string>
+    <string name="jual_hargajudul">Jual Komoditas</string>
     <string name="lapor_hargajuduledit">Detil Laporan Harga</string>
-    <string name="lapor_keterangan">Laporkan harga komoditas pangan dengan mengisi data-data di bawah ini dengan lengkap dan benar</string>
+    <string name="lapor_keterangan">Laporkan harga komoditas pangan dengan mengisi data-data dibawah ini dengan lengkap dan benar dan mengisi keterangan tambahan</string>
+    <string name="lapor_keterangan1">Jual Komoditas pangan dengan mengisi data-data dibawah ini dengan lengkap dan benar dan mengisi keterangan tambahan</string>
     <string name="lapor_jeniskomoditas">Nama Komoditas</string>
     <string name="lapor_harga">Harga (Rp/Kg)</string>
     <string name="lapor_hargahint">harga komoditas</string>
     <string name="lapor_kuantitas">Jumlah (Kg)</string>
     <string name="lapor_kuantitashint">jumlah komoditas pangan</string>
+    <string name="lapor_ket">Keterangan</string>
+    <string name="lapor_kethint">isi keterangan komoditas pangan</string>
     <string name="lapor_koordinat">Lokasi</string>
     <string name="lapor_kirimdata">KIRIM DATA</string>
     <string name="lapor_simpandata">SIMPAN DRAFT</string>
@@ -164,6 +168,13 @@
     <string name="tentangapl_facebooklink">https://www.facebook.com/pantauharga</string>
 
     <string name="tentangapl_pembuat">Dibuat oleh tim CodingStelsel di Code4Nation.org</string>
+    <string name="title_activity_generate__qr">Generate_QR</string>
+    <string name="title_activity_scan_qr">Scan_qr</string>
+    <string name="ic_teks_generate_qr">Generate QR</string>
+    <string name="ic_teks_menu_can_code">Scan QR</string>
+    <string name="scan">Scan</string>
+    <string name="btn_scan_now">Scan Now</string>
+    <string name="txt_scan_qr_code">Scan QR</string>
 
 
 </resources>

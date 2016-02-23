@@ -11,7 +11,7 @@ public class HargaKomoditasKirim {
     private String nohp = "";
     private String harga = "";
     private String quantity = "";
-
+    private String keterangan="";
     public HargaKomoditasKirim() {
     }
 
@@ -62,4 +62,13 @@ public class HargaKomoditasKirim {
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
+
+    public String getKeterangan() {
+        return keterangan;
+    }
+
+    public void setKeterangan(String keterangan) {
+        this.keterangan = keterangan;
+    }
+
 }

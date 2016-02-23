@@ -85,7 +85,7 @@ public class Loading extends AppCompatActivity {
         setContentView(R.layout.loadings);
         ButterKnife.bind(Loading.this);
 
-        Glide.with(Loading.this).load(R.drawable.banana).into(gambarbesar);
+        Glide.with(Loading.this).load(R.drawable.web_hi_res_512).into(gambarbesar);
 
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(Loading.this).build();
 

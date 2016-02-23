@@ -19,6 +19,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -259,6 +260,13 @@ public class Parseran {
         List<HargaKomoditasItemKomparator> listkomparator = new ArrayList<>();
         HargaKomoditasItemKomparator hargaKomoditasItemKomparator;
 
+        String barang = "";
+        String latitude = "";
+        String longitude = "";
+        String nohp = "";
+        int price = 0;
+        int type = 0;
+        String keterangan="";
         float jaraklokasi = 0;
 
         Location lokasicekkomoditas = new Location("");
@@ -268,31 +276,39 @@ public class Parseran {
             int panjangarray = hargaKomoditasItemList.size();
 
             try {
-
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
-                String latitude = "";
-                String longitude = "";
-
                 for (int i = 0; i < panjangarray; i++) {
+
                     HargaKomoditasItem hargaKomoditasItem = hargaKomoditasItemList.get(i);
+                    barang = hargaKomoditasItem.getBarang();
                     latitude = hargaKomoditasItem.getLatitude();
                     longitude = hargaKomoditasItem.getLongitude();
+                    nohp = hargaKomoditasItem.getNohp();
+                    price = hargaKomoditasItem.getPrice();
+                    keterangan = hargaKomoditasItem.getKeterangan();
 
-                    lokasicekkomoditas.setLatitude(Double.valueOf(latitude));
-                    lokasicekkomoditas.setLongitude(Double.valueOf(longitude));
+                    type = hargaKomoditasItem.getType();
+
+                    double dolatitude = Double.valueOf(latitude);
+                    double dolongitude = Double.valueOf(longitude);
+
+                    lokasicekkomoditas.setLatitude(dolatitude);
+                    lokasicekkomoditas.setLongitude(dolongitude);
 
                     jaraklokasi = locationSaya.distanceTo(lokasicekkomoditas);
 
                     hargaKomoditasItemKomparator = new HargaKomoditasItemKomparator();
-                    hargaKomoditasItemKomparator.setBarang(hargaKomoditasItem.getBarang());
+                    hargaKomoditasItemKomparator.setBarang(barang);
                     hargaKomoditasItemKomparator.setLatitude(latitude);
                     hargaKomoditasItemKomparator.setLongitude(longitude);
-                    hargaKomoditasItemKomparator.setNohp(hargaKomoditasItem.getNohp());
-                    hargaKomoditasItemKomparator.setPrice(hargaKomoditasItem.getPrice());
-                    hargaKomoditasItemKomparator.setJaraklokasi(jaraklokasi + "");
-                    hargaKomoditasItemKomparator.setDescription(hargaKomoditasItem.getDescription());
+                    hargaKomoditasItemKomparator.setNohp(nohp);
+                    hargaKomoditasItemKomparator.setPrice(price);
+                    hargaKomoditasItemKomparator.setKeterangan(keterangan);
                     hargaKomoditasItemKomparator.setLastUpdated(df.parse(hargaKomoditasItem.getLastUpdated()));
-                    Log.w("HARGA BARANG SIMPAN ", "" + hargaKomoditasItem.getBarang() + " " + hargaKomoditasItem.getPrice());
+                    hargaKomoditasItemKomparator.setType(type);
+                    hargaKomoditasItemKomparator.setJaraklokasi(jaraklokasi + "");
+
+                    Log.w("HARGA BARANG SIMPAN ", "" + barang + " " + price);
 
                     listkomparator.add(hargaKomoditasItemKomparator);
                 }

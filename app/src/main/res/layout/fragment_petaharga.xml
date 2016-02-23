@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:keepScreenOn="true"
               android:orientation="vertical">
 
@@ -84,7 +84,6 @@
                             android:textColor="@color/warnatekssubjudul"
                             android:textSize="@dimen/ukuran14sp"/>
 
-
                         <TextView
                             android:id="@+id/teks_nomortelpon"
                             android:layout_width="match_parent"
@@ -95,26 +94,22 @@
                             android:textSize="@dimen/ukuran14sp"/>
 
                         <TextView
-                            android:id="@+id/teks_last_updated"
+                            android:id="@+id/teks_lastupdate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:text="Last Updated : "
+                            android:text="Lastupdate : "
                             android:textColor="@color/warnatekssubjudul"
                             android:textSize="@dimen/ukuran14sp"/>
 
-
                         <TextView
-                            android:id="@+id/teks_description"
+                            android:id="@+id/teks_keterangan"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
                             android:text="Keterangan : "
                             android:textColor="@color/warnatekssubjudul"
                             android:textSize="@dimen/ukuran14sp"/>
-
-
-
 
                     </LinearLayout>
 

@@ -80,6 +80,8 @@ public class PesanKomoditas extends BaseActivityLocation {
     EditText edit_jumlahkomoditas;
     @Bind(R.id.edit_koordinatlokasi)
     EditText edit_kordinatlokasi;
+    @Bind(R.id.edit_keterangan)
+    EditText edit_keterangan;
 
 
     @Bind(R.id.tombol_setelpeta)
@@ -101,7 +103,7 @@ public class PesanKomoditas extends BaseActivityLocation {
     private String namalokasi = "";
     private String latitude = "";
     private String longitude = "";
-
+    private String keterangan ="";
 
     //database
     private Realm mRealm;
@@ -153,7 +155,7 @@ public class PesanKomoditas extends BaseActivityLocation {
     };
 
 
-    private int kode_kirimKomoditas = Konstan.KODE_KIRIMHARGAJUALKOMO_AKT;
+    private int kode_kirimKomoditas = Konstan.KODE_KIRIMHARGAPESANKOMO_AKT;
 
 
     //simpan database
@@ -163,7 +165,7 @@ public class PesanKomoditas extends BaseActivityLocation {
     private String datasimpan_lng = "";
     private String datasimpan_nohp = "";
     private String datasimpan_quantity = "";
-
+    private String datasimpan_keterangan ="";
 
     private boolean statusKirim = false;
 
@@ -498,10 +500,15 @@ public class PesanKomoditas extends BaseActivityLocation {
 
         hargakomoditas = edit_harga.getText().toString().replace(",", "").replace(".", "");
 
-        if (kode_kirimKomoditas == Konstan.KODE_KIRIMHARGAJUALKOMO_AKT) {
+        if (kode_kirimKomoditas == Konstan.KODE_KIRIMHARGAPESANKOMO_AKT) {
             jumlahkomoditas = edit_jumlahkomoditas.getText().toString();
+            keterangan = edit_keterangan.getText().toString();
+            if(keterangan.equals("")){
+                keterangan = "0";
+            }
         } else {
             jumlahkomoditas = "0";
+            keterangan = "0";
         }
 
         namalokasi = alamatgabungan;
@@ -512,7 +519,7 @@ public class PesanKomoditas extends BaseActivityLocation {
 
         if (hargakomoditas.length() < 4) {
             tampilPeringatanGagalIsi(edit_harga, R.string.lapor_toast_gagalharga);
-        } else if (kode_kirimKomoditas == Konstan.KODE_KIRIMHARGAJUALKOMO_AKT && jumlahkomoditas.length() < 1) {
+        } else if (kode_kirimKomoditas == Konstan.KODE_KIRIMHARGAPESANKOMO_AKT && jumlahkomoditas.length() < 1) {
             tampilPeringatanGagalIsi(edit_jumlahkomoditas, R.string.lapor_toast_jumlahkomod);
         } else if (latitude.length() < 3 || longitude.length() < 3) {
             tampilPeringatanGagalIsi(edit_kordinatlokasi, R.string.lapor_toast_gagalokasi);
@@ -539,7 +546,7 @@ public class PesanKomoditas extends BaseActivityLocation {
 
         hargakomoditas = edit_harga.getText().toString().replace(",", "").replace(".", "");
 
-        if (kode_kirimKomoditas == Konstan.KODE_KIRIMHARGAJUALKOMO_AKT) {
+        if (kode_kirimKomoditas == Konstan.KODE_KIRIMHARGAPESANKOMO_AKT) {
             jumlahkomoditas = edit_jumlahkomoditas.getText().toString();
         } else {
             jumlahkomoditas = "0";
@@ -550,7 +557,7 @@ public class PesanKomoditas extends BaseActivityLocation {
         longitude = "" + longitudepengguna;
 
         simpanDatabase(true, false, idkomoditas, namakomoditas, latitude, longitude,
-                namalokasi, datakirim_nohp, hargakomoditas, jumlahkomoditas);
+                namalokasi, datakirim_nohp, hargakomoditas, jumlahkomoditas, keterangan);
     }
 
 
@@ -592,6 +599,7 @@ public class PesanKomoditas extends BaseActivityLocation {
                 hargaKomoditasKirim.setNohp(datakirim_nohp);
                 hargaKomoditasKirim.setHarga(hargakomoditas);
                 hargaKomoditasKirim.setQuantity(jumlahkomoditas);
+                hargaKomoditasKirim.setKeterangan(keterangan);
 
                 return mParseran.konversiPojoKirimHarga(hargaKomoditasKirim);
             }
@@ -663,7 +671,7 @@ public class PesanKomoditas extends BaseActivityLocation {
             datasimpan_lng = hargaKomoditasLapor.getLng() + "";
             datasimpan_nohp = hargaKomoditasLapor.getNohp();
             datasimpan_quantity = hargaKomoditasLapor.getQuantity() + "";
-
+            datasimpan_keterangan = hargaKomoditasLapor.getKeterangan()+ "";
             Log.w("HASIL HARGA", datasimpan_id + " harga " + datasimpan_harga + " jumlah "
                     + datasimpan_quantity + " lat " + datasimpan_lat + " lng " + datasimpan_lng);
 
@@ -671,7 +679,7 @@ public class PesanKomoditas extends BaseActivityLocation {
 
                 //simpan ke database riwayat
                 simpanDatabase(false, true, datasimpan_id, namakomoditas, datasimpan_lat,
-                        datasimpan_lng, namalokasi, datasimpan_nohp, datasimpan_harga, datasimpan_quantity);
+                        datasimpan_lng, namalokasi, datasimpan_nohp, datasimpan_harga, datasimpan_quantity,datasimpan_keterangan);
 
             } else {
                 //gagal kirim data laporan
@@ -691,7 +699,7 @@ public class PesanKomoditas extends BaseActivityLocation {
     //SIMPAN KE DALAM DATABASE
     private void simpanDatabase(boolean isDraft, boolean isKirim, String id, String namakomoditas, String lats,
                                 String lngs, String alamatkomods, String nohps,
-                                String hargas, String quantitis) {
+                                String hargas, String quantitis, String keterangan) {
 
 
         RMDataRiwayat rmDataRiwayat = new RMDataRiwayat();
@@ -703,6 +711,7 @@ public class PesanKomoditas extends BaseActivityLocation {
         rmDataRiwayat.setNohp(nohps);
         rmDataRiwayat.setHarga(hargas);
         rmDataRiwayat.setQuantity(quantitis);
+        rmDataRiwayat.setKeterangan(keterangan);
         rmDataRiwayat.setIsKirim(isKirim);
         rmDataRiwayat.setIsDraft(isDraft);
 

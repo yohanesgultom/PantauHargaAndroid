@@ -3,6 +3,7 @@ package id.pantauharga.android.adapters;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import id.pantauharga.android.R;
@@ -28,7 +34,7 @@ public class RecyclerDaftarHarga extends RecyclerView.Adapter<RecyclerDaftarHarg
     private final TypedValue typedvalues = new TypedValue();
     private int mBackground;
     private OnItemClickListener mOnItemClickListener;
-
+    private SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyy HH:mm");
     private Parseran mParseran;
     private int kodegambar = R.drawable.ic_action_keranjang1;
 
@@ -64,6 +70,12 @@ public class RecyclerDaftarHarga extends RecyclerView.Adapter<RecyclerDaftarHarg
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
         HargaKomoditasItemKomparator hargaKomoItem = listharga.get(position);
+        //ambil lastupadate
+
+        Date init_last_updated = hargaKomoItem.getLastUpdated();
+
+        //Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //String sfor = formatter.format(date);
 
         //ambil nama komoditas
         String namakomoditas = hargaKomoItem.getBarang();
@@ -81,12 +93,12 @@ public class RecyclerDaftarHarga extends RecyclerView.Adapter<RecyclerDaftarHarg
         //ambil harga
         int hargabarang = hargaKomoItem.getPrice();
 
-        String hargaketerangantampil = "Rp " + mParseran.formatAngkaPisah(hargabarang) + ",-";
+        String hargaketerangantampil = "Rp " + mParseran.formatAngkaPisah(hargabarang) + " per kg";
 
 
         holder.teks_namakomoditas.setText(nama2);
         holder.teks_keteranganharga.setText(hargaketerangantampil);
-
+        holder.teks_lastup.setText("Last Updated : " + formatDate.format(init_last_updated));
         ImageView gambarlist = holder.gambar_list;
         Picasso.with(konteks).load(kodegambar).into(gambarlist);
 
@@ -125,6 +137,7 @@ public class RecyclerDaftarHarga extends RecyclerView.Adapter<RecyclerDaftarHarg
         public TextView teks_namakomoditas;
         public TextView teks_keteranganharga;
         public ImageView gambar_list;
+        public TextView teks_lastup;
 
         public View containers;
 
@@ -136,7 +149,7 @@ public class RecyclerDaftarHarga extends RecyclerView.Adapter<RecyclerDaftarHarg
 
             teks_namakomoditas = (TextView) containers.findViewById(R.id.teks_namakomoditas);
             teks_keteranganharga = (TextView) containers.findViewById(R.id.teks_keteranganharga);
-
+            teks_lastup = (TextView) containers.findViewById(R.id.teks_lastup);
             gambar_list = (ImageView) containers.findViewById(R.id.gambar_list);
 
         }

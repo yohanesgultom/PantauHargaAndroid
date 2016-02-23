@@ -18,7 +18,7 @@ import id.pantauharga.android.modelgson.Registrasis;
  */
 public class Apis {
 
-    public static int JUMLAH_TIMEOUT = 10000;
+    public static int JUMLAH_TIMEOUT = 2500;
     public static int JUMLAH_COBA = 2;
     public static float PENGALI_TIMEOUT = 1;
 
@@ -40,10 +40,11 @@ public class Apis {
     //LAPORKAN HARGA KOMODITAS
     ///Api/input.json
     public static String getLinkLaporHargaKomoditas() {
-        return Konstan.ALAMATSERVER + "/Api/input.json";
+        return Konstan.ALAMATSERVER +"/Api/input.json";
+
     }
     public static String getLinkPesanKomoditas() {
-        return Konstan.ALAMATSERVER + "/Api/inputRequest.json";
+       return Konstan.ALAMATSERVER + "/Api/inputRequest.json";
     }
     //AMBIL DAFTAR KOMODITAS
     ///Api/comodityall.json

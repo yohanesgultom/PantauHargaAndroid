@@ -204,7 +204,7 @@ public class LaporRiwayat extends AppCompatActivity {
 
                 String bulatanharga = mParseran.pembulatanBilangan(rmDataRiwayat.getHarga(), 0);
                 int bulatanhargaint = Integer.valueOf(bulatanharga);
-                String hargapisah = "Rp " + mParseran.formatAngkaPisah(bulatanhargaint) + ",-";
+                String hargapisah = "Rp " + mParseran.formatAngkaPisah(bulatanhargaint) + " per kg";
 
                 viewHolderan.getTeks_namakomoditas().setText(namakomoditas);
                 viewHolderan.getTeks_alamatkomoditas().setText(namalokasi);
