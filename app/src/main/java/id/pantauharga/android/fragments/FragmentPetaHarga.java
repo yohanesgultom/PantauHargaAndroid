@@ -170,6 +170,47 @@ public class FragmentPetaHarga extends Fragment {
             EventBus.getDefault().unregister(FragmentPetaHarga.this);
         }
     }
+    public void displayInfo(HargaKomoditasItemKomparator itemloks) {
+        init_namakomoditas = itemloks.getBarang();
+        init_hargakomoditas = itemloks.getPrice();
+        init_telponkomoditas = itemloks.getNohp();
+        init_latitudekomoditas = itemloks.getLatitude();
+        init_longitudekomoditas = itemloks.getLongitude();
+        init_keterangan = itemloks.getKeterangan();
+        init_last_updated = itemloks.getLastUpdated();
+        init_type = itemloks.getType();
+        String namakomoditastype = "";
+        if (init_type == 2) {
+            namakomoditastype = init_namakomoditas + "(Beli)";
+        } else if (init_type == 1) {
+            namakomoditastype = init_namakomoditas + "(Jual)";
+        } else {
+            namakomoditastype = init_namakomoditas + "(Pantau)";
+        }
+
+        teks_namakomoditas.setText(namakomoditastype);
+
+        str_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(init_hargakomoditas) + ",-";
+        teks_hargakomoditas.setText(str_formathargakomoditas);
+
+        if (init_telponkomoditas.length() > 4) {
+            String teksets = "Telp : " + init_telponkomoditas;
+            teks_telponkomoditas.setText(teksets);
+            teks_telponkomoditas.setVisibility(View.VISIBLE);
+        } else {
+            String teksets = "Telp : -";
+            teks_telponkomoditas.setText(teksets);
+            teks_telponkomoditas.setVisibility(View.GONE);
+        }
+        if (init_keterangan != null && !init_keterangan.isEmpty()) {
+            teks_keterangan.setText("Keterangan : \n" + init_keterangan);
+            teks_keterangan.setVisibility(View.VISIBLE);
+        } else {
+            teks_keterangan.setText("Keterangan : -");
+            teks_keterangan.setVisibility(View.GONE);
+        }
+        teks_lastupdate.setText("Last Updated : " + formatDate.format(init_last_updated));
+    }
 
 
     /**
@@ -382,50 +423,7 @@ public class FragmentPetaHarga extends Fragment {
 
 
             //ambil data awal untuk inisialisasi keterangan
-            HargaKomoditasItemKomparator itemloks = mListKomoHargaKomparator.get(0);
-            init_namakomoditas = itemloks.getBarang();
-
-            init_hargakomoditas = itemloks.getPrice();
-            init_telponkomoditas = itemloks.getNohp();
-            init_latitudekomoditas = itemloks.getLatitude();
-            init_longitudekomoditas = itemloks.getLongitude();
-            init_keterangan = itemloks.getKeterangan();
-            init_type = itemloks.getType();
-            init_last_updated = itemloks.getLastUpdated();
-            String namakomoditastype = "";
-            if(init_type == 2){
-                namakomoditastype = init_namakomoditas+"(Beli)";
-            } else if(init_type == 1) {
-                namakomoditastype = init_namakomoditas+"(Jual)";
-            } else {
-                namakomoditastype = init_namakomoditas+"(Pantau)";
-            }
-            teks_lastupdate.setText("Last Updated : " + formatDate.format(init_last_updated));
-            teks_namakomoditas.setText(namakomoditastype);
-
-            if (init_keterangan.length() > 1) {
-                String teksets1 = "Keterangan : " + init_keterangan;
-                teks_keterangan.setText(teksets1);
-                teks_keterangan.setVisibility(View.VISIBLE);
-            } else {
-                String teksets1 = "Keterangan : -";
-                teks_keterangan.setText(teksets1);
-                teks_keterangan.setVisibility(View.GONE);
-            }
-            str_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(init_hargakomoditas) + " per kg";
-            teks_hargakomoditas.setText(str_formathargakomoditas);
-
-            if (init_telponkomoditas.length() > 4) {
-                String teksets = "Telp : " + init_telponkomoditas;
-                teks_telponkomoditas.setText(teksets);
-                teks_telponkomoditas.setVisibility(View.VISIBLE);
-            } else {
-                String teksets = "Telp : -";
-                teks_telponkomoditas.setText(teksets);
-                teks_telponkomoditas.setVisibility(View.GONE);
-
-            }
-
+            displayInfo(mListKomoHargaKomparator.get(0));
 
             //task ambil geocoder
             taskAmbilGeocoder(init_latitudekomoditas, init_longitudekomoditas);
@@ -497,54 +495,7 @@ public class FragmentPetaHarga extends Fragment {
 
 
             //ambil data awal untuk inisialisasi keterangan
-            HargaKomoditasItemKomparator itemloks = mListKomoHargaKomparator.get(posisiklik);
-            init_namakomoditas = itemloks.getBarang();
-            init_hargakomoditas = itemloks.getPrice();
-            init_telponkomoditas = itemloks.getNohp();
-            init_latitudekomoditas = itemloks.getLatitude();
-            init_longitudekomoditas = itemloks.getLongitude();
-            init_keterangan = itemloks.getKeterangan();
-            init_type = itemloks.getType();
-
-            init_last_updated = itemloks.getLastUpdated();
-
-
-            String namakomoditastype = "";
-            if(init_type == 2){
-                namakomoditastype = init_namakomoditas+"(Beli)";
-            } else if(init_type == 1) {
-                namakomoditastype = init_namakomoditas + "(Jual)";
-            }else {
-                namakomoditastype = init_namakomoditas +"(Pantau)";
-            }
-
-            teks_namakomoditas.setText(namakomoditastype);
-            teks_lastupdate.setText("Last Updated : " + formatDate.format(init_last_updated));
-            if (init_keterangan.length() > 4) {
-                String teksets1 = "Keterangan : " + init_keterangan;
-                teks_keterangan.setText(teksets1);
-                teks_keterangan.setVisibility(View.VISIBLE);
-            } else{
-                String teksets1 = "Keterangan : -";
-                teks_keterangan.setText(teksets1);
-                teks_keterangan.setVisibility(View.GONE);
-            }
-
-            str_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(init_hargakomoditas) + " per kg";
-            teks_hargakomoditas.setText(str_formathargakomoditas);
-
-            if (init_telponkomoditas.length() > 4) {
-                String teksets = "Telp : " + init_telponkomoditas;
-                teks_telponkomoditas.setText(teksets);
-                teks_telponkomoditas.setVisibility(View.VISIBLE);
-
-            } else {
-                String teksets = "Telp : -";
-                teks_telponkomoditas.setText(teksets);
-                teks_telponkomoditas.setVisibility(View.GONE);
-
-            }
-
+            displayInfo(mListKomoHargaKomparator.get(posisiklik));
 
             //task ambil geocoder
             taskAmbilGeocoder(init_latitudekomoditas, init_longitudekomoditas);
@@ -620,55 +571,7 @@ public class FragmentPetaHarga extends Fragment {
 
             //tampilkan keterangan marker
             try {
-
-                HargaKomoditasItemKomparator hargamarkerklik = hashmapListHarga.get(marker);
-
-                String marklik_namakomoditas = hargamarkerklik.getBarang();
-                int marklik_hargakomoditas = hargamarkerklik.getPrice();
-                String marklik_telponkomoditas = hargamarkerklik.getNohp();
-                latpeta = hargamarkerklik.getLatitude();
-                longipeta = hargamarkerklik.getLongitude();
-                int marklik_type = hargamarkerklik.getType();
-                String marklik_keterangan = hargamarkerklik.getKeterangan();
-
-                init_last_updated = hargamarkerklik.getLastUpdated();
-
-                String namakomoditastype = "";
-                if(marklik_type == 2){
-                    namakomoditastype = marklik_namakomoditas+"(Beli)";
-                }else if(marklik_type == 1){
-                    namakomoditastype = marklik_namakomoditas+"(Jual)";
-                }else{
-                    namakomoditastype = marklik_namakomoditas+"(Pantau)";
-                }
-                teks_namakomoditas.setText(namakomoditastype);
-
-                if (marklik_keterangan.length() > 4) {
-                    String teksets1 = "Keterangan : " + marklik_keterangan;
-                    teks_keterangan.setText(teksets1);
-                    teks_keterangan.setVisibility(View.VISIBLE);
-                } else {
-                    String teksets1 = "Keterangan : -";
-                    teks_keterangan.setText(teksets1);
-                    teks_keterangan.setVisibility(View.GONE);
-                }
-                String markerklik_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(marklik_hargakomoditas) + " per kg";
-                teks_hargakomoditas.setText(markerklik_formathargakomoditas);
-                teks_lastupdate.setText("Last Updated : " + formatDate.format(init_last_updated));
-                if (marklik_telponkomoditas.length() > 4) {
-                    String teksets = "Telp : " + marklik_telponkomoditas;
-                    teks_telponkomoditas.setText(teksets);
-                    teks_telponkomoditas.setVisibility(View.VISIBLE);
-
-                } else {
-                    String teksets = "Telp : -";
-                    teks_telponkomoditas.setText(teksets);
-                    teks_telponkomoditas.setVisibility(View.GONE);
-
-                }
-
-
-
+                displayInfo(hashmapListHarga.get(marker));
 
                 //task ambil geocoder
                 taskAmbilGeocoder(latpeta, longipeta);
@@ -798,15 +701,7 @@ public class FragmentPetaHarga extends Fragment {
                     teks_alamatkomoditas.setText("-");
                     teks_alamatkomoditas.setVisibility(View.GONE);
                 }
-                if (init_keterangan.length() > 4) {
-                    String teksets1 = "Keterangan : " + init_keterangan;
-                    teks_keterangan.setText(teksets1);
-                    teks_keterangan.setVisibility(View.VISIBLE);
-                } else {
-                    String teksets1 = "Keterangan : -";
-                    teks_keterangan.setText(teksets1);
-                    teks_keterangan.setVisibility(View.GONE);
-                }
+
                 return null;
             }
         }, Task.UI_THREAD_EXECUTOR);

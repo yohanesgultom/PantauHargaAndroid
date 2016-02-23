@@ -131,17 +131,6 @@
                 <category android:name="android.intent.category.NOLAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".aktivitas.Generate_QR"
-            android:label="@string/title_activity_generate__qr"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.NOLAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <meta-data
             android:name="com.bumptech.glide.integration.okhttp.OkHttpGlideModule"
