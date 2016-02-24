@@ -15,7 +15,7 @@ public class RMDataRiwayat extends RealmObject {
     private String nohp;
     private String harga;
     private String quantity;
-
+    private String keterangan;
     private boolean isKirim;
     private boolean isDraft;
 
@@ -85,6 +85,14 @@ public class RMDataRiwayat extends RealmObject {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public String getKeterangan() {
+        return keterangan;
+    }
+
+    public void setKeterangan(String keterangan) {
+        this.keterangan = keterangan;
     }
 
     public boolean isKirim() {

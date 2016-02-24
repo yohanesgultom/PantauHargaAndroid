@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,7 +35,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.logging.SimpleFormatter;
 
 import bolts.Continuation;
 import bolts.Task;
@@ -64,16 +64,16 @@ public class FragmentPetaHarga extends Fragment {
 
     @Bind(R.id.teks_namakomoditas)
     TextView teks_namakomoditas;
+    @Bind(R.id.teks_keterangan)
+    TextView teks_keterangan;
+    @Bind(R.id.teks_lastupdate)
+    TextView teks_lastupdate;
     @Bind(R.id.teks_hargakomoditas)
     TextView teks_hargakomoditas;
     @Bind(R.id.teks_alamatlokasi)
     TextView teks_alamatkomoditas;
     @Bind(R.id.teks_nomortelpon)
     TextView teks_telponkomoditas;
-    @Bind(R.id.teks_last_updated)
-    TextView teks_last_updated;
-    @Bind(R.id.teks_description)
-    TextView teks_description;
     @Bind(R.id.tombol_navigasi)
     FloatingActionButton tombolnavigasikan;
 
@@ -85,8 +85,8 @@ public class FragmentPetaHarga extends Fragment {
     private double longitudesaya = 0;
     private Location lokasisaya = null;
     private boolean isMapSiap = false;
-
-
+    private Date init_last_updated = new Date();
+    private SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyy HH:mm");
     //DAFTAR HARGA KOMODITAS
 
     private List<HargaKomoditasItem> mListKomoditasHarga;
@@ -118,15 +118,12 @@ public class FragmentPetaHarga extends Fragment {
     private String init_namakomoditas = "";
     private int init_hargakomoditas = 0;
     private int init_type = 0;
+    private String init_keterangan ="";
     private String str_formathargakomoditas = "0";
     private String init_alamatkomoditas = "";
     private String init_telponkomoditas = "";
     private String init_latitudekomoditas = "0";
     private String init_longitudekomoditas = "0";
-    private Date init_last_updated = new Date();
-    private String init_description = "";
-
-    private SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyy HH:mm");
 
 
     @Nullable
@@ -144,6 +141,8 @@ public class FragmentPetaHarga extends Fragment {
         tombolnavigasikan.setOnClickListener(listenertombolfloat);
         teks_alamatkomoditas.setVisibility(View.GONE);
         teks_telponkomoditas.setVisibility(View.GONE);
+        teks_keterangan.setVisibility(View.GONE);
+
 
         return view;
     }
@@ -171,14 +170,13 @@ public class FragmentPetaHarga extends Fragment {
             EventBus.getDefault().unregister(FragmentPetaHarga.this);
         }
     }
-
     public void displayInfo(HargaKomoditasItemKomparator itemloks) {
         init_namakomoditas = itemloks.getBarang();
         init_hargakomoditas = itemloks.getPrice();
         init_telponkomoditas = itemloks.getNohp();
         init_latitudekomoditas = itemloks.getLatitude();
         init_longitudekomoditas = itemloks.getLongitude();
-        init_description = itemloks.getDescription();
+        init_keterangan = itemloks.getKeterangan();
         init_last_updated = itemloks.getLastUpdated();
         init_type = itemloks.getType();
         String namakomoditastype = "";
@@ -204,14 +202,14 @@ public class FragmentPetaHarga extends Fragment {
             teks_telponkomoditas.setText(teksets);
             teks_telponkomoditas.setVisibility(View.GONE);
         }
-        if (init_description != null && !init_description.isEmpty()) {
-            teks_description.setText("Keterangan : \n" + init_description);
-            teks_description.setVisibility(View.VISIBLE);
+        if (init_keterangan != null && !init_keterangan.isEmpty()) {
+            teks_keterangan.setText("Keterangan : \n" + init_keterangan);
+            teks_keterangan.setVisibility(View.VISIBLE);
         } else {
-            teks_description.setText("Keterangan : -");
-            teks_description.setVisibility(View.GONE);
+            teks_keterangan.setText("Keterangan : -");
+            teks_keterangan.setVisibility(View.GONE);
         }
-        teks_last_updated.setText("Last Updated : " + formatDate.format(init_last_updated));
+        teks_lastupdate.setText("Last Updated : " + formatDate.format(init_last_updated));
     }
 
 
@@ -396,6 +394,7 @@ public class FragmentPetaHarga extends Fragment {
                 teks_hargakomoditas.setText("Harga tidak tersedia");
                 teks_alamatkomoditas.setText("Alamat tidak tersedia");
                 teks_telponkomoditas.setText("Telepon tidak tersedia");
+                teks_keterangan.setText("Tidah ada keterangan");
             }
         }
 
@@ -436,17 +435,19 @@ public class FragmentPetaHarga extends Fragment {
                 lokitem = mListKomoHargaKomparator.get(i);
                 loops_namakomoditas = lokitem.getBarang();
                 loops_type = lokitem.getType();
-                String namakomo = "";
-                int icon = 0;
-                if (loops_type == 2) {
-                    namakomo = loops_namakomoditas + "(B)";
-                    icon = R.drawable.ic_buy;
-                } else if (loops_type == 1) {
-                    namakomo = loops_namakomoditas + "(J)";
-                    icon = R.drawable.ic_sell;
-                } else {
-                    namakomo = loops_namakomoditas + "(P)";
-                    icon = R.drawable.ic_pantau;
+                String namakomo ="";
+                int icon = 0 ;
+                if (loops_type == 2){
+                    namakomo = loops_namakomoditas+"(B)";
+                    icon =R.drawable.ic_buy;
+                }
+                else if (loops_type == 1) {
+                    namakomo = loops_namakomoditas+"(J)";
+                    icon =R.drawable.ic_sell;
+                }
+                else {
+                    namakomo = loops_namakomoditas+"(P)";
+                    icon =R.drawable.ic_pantau;
                 }
 
                 dolatitude = Double.valueOf(lokitem.getLatitude());
@@ -499,7 +500,6 @@ public class FragmentPetaHarga extends Fragment {
             //task ambil geocoder
             taskAmbilGeocoder(init_latitudekomoditas, init_longitudekomoditas);
 
-
             //setel ke peta
             for (int i = 0; i < panjangarray; i++) {
 
@@ -507,16 +507,16 @@ public class FragmentPetaHarga extends Fragment {
 
                 loops_namakomoditas = lokitem.getBarang();
                 loops_type = lokitem.getType();
-                String namakomo = "";
-                int icon2 = 0;
-                if (loops_type == 2) {
-                    namakomo = loops_namakomoditas + "(B)";
-                    icon2 = R.drawable.ic_buy;
-                } else if (loops_type == 1) {
-                    namakomo = loops_namakomoditas + "(J)";
-                    icon2 = R.drawable.ic_sell;
-                } else {
-                    namakomo = loops_namakomoditas + "(P)";
+                String namakomo ="";
+                int icon2 =0;
+                if (loops_type == 2){
+                    namakomo = loops_namakomoditas+"(B)";
+                    icon2 =R.drawable.ic_buy;
+                }else if (loops_type == 1) {
+                    namakomo = loops_namakomoditas+"(J)";
+                    icon2 =R.drawable.ic_sell;
+                }else  {
+                    namakomo = loops_namakomoditas+"(P)";
                     icon2 = R.drawable.ic_pantau;
                 }
                 dolatitude = Double.valueOf(lokitem.getLatitude());
@@ -694,7 +694,6 @@ public class FragmentPetaHarga extends Fragment {
             public Object then(Task<Object> task) throws Exception {
 
                 if (alamatgabungan.length() > 4) {
-
                     Log.w("ALAMAT GABUNGAN TASK", "ALAMAT " + alamatgabungan);
                     teks_alamatkomoditas.setText(alamatgabungan);
                     teks_alamatkomoditas.setVisibility(View.VISIBLE);
@@ -702,6 +701,7 @@ public class FragmentPetaHarga extends Fragment {
                     teks_alamatkomoditas.setText("-");
                     teks_alamatkomoditas.setVisibility(View.GONE);
                 }
+
                 return null;
             }
         }, Task.UI_THREAD_EXECUTOR);

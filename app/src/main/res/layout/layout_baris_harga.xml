@@ -64,7 +64,16 @@
                     />
 
             </LinearLayout>
-
+            <TextView
+                android:id="@+id/teks_lastup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:text="lastupdate: "
+                android:textColor="@color/abu_teks_tebal500"
+                android:textSize="@dimen/ukuran14sp"
+                android:textStyle="bold"
+                />
 
         </LinearLayout>
 

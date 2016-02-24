@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="id.pantauharga.android"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
     android:versionCode="2"
     android:versionName="1.0.0">
 
-
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="23"/>
+        android:targetSdkVersion="23" />
 
     <supports-screens
         android:anyDensity="true"
-        android:resizeable="true"/>
+        android:resizeable="true" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"/>
+        android:required="true" />
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -36,126 +33,118 @@
         android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-
-
         <activity
-            android:name="id.pantauharga.android.aktivitas.Loading"
+            android:name=".aktivitas.Loading"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeCompatLoading">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
-            android:name="id.pantauharga.android.aktivitas.MenuUtama"
+            android:name=".aktivitas.MenuUtama"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.NOLAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.NOLAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
-            android:name="id.pantauharga.android.aktivitas.LoginRegistersPengguna"
+            android:name=".aktivitas.LoginRegistersPengguna"
             android:label="@string/login_register_datapengguna"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.NOLAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.NOLAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
-            android:name="id.pantauharga.android.aktivitas.LaporHarga"
+            android:name=".aktivitas.LaporHarga"
             android:label="@string/lapor_hargajudul"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.NOLAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.NOLAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="id.pantauharga.android.aktivitas.PesanKomoditas"
+            android:name=".aktivitas.PesanKomoditas"
             android:label="@string/ic_teks_menu_belikomoditas"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.NOLAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.NOLAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="id.pantauharga.android.aktivitas.PetaAmbilLokasi"
+            android:name=".aktivitas.PetaAmbilLokasi"
             android:label="@string/petaambil_judulhalaman"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.NOLAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.NOLAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
-            android:name="id.pantauharga.android.aktivitas.LaporRiwayat"
+            android:name=".aktivitas.LaporRiwayat"
             android:label="@string/riwayat_judul"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.NOLAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.NOLAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
-            android:name="id.pantauharga.android.aktivitas.LaporHargaEdit"
+            android:name=".aktivitas.LaporHargaEdit"
             android:label="@string/riwayat_judul"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.NOLAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.NOLAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
-            android:name="id.pantauharga.android.aktivitas.TentangApl"
+            android:name=".aktivitas.TentangApl"
             android:label="@string/tentangapl_judul"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.NOLAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.NOLAUNCHER" />
             </intent-filter>
         </activity>
 
-
         <meta-data
             android:name="com.bumptech.glide.integration.okhttp.OkHttpGlideModule"
-            android:value="GlideModule"/>
-
-
+            android:value="GlideModule" />
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
-
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB3QJMaUF6xKYlX7xNicslomu_lktQrnIc"/>
+            android:value="AIzaSyB3QJMaUF6xKYlX7xNicslomu_lktQrnIc" />
 
-
+        <activity
+            android:name=".aktivitas.Scan_qr"
+            android:label="@string/title_activity_scan_qr"></activity>
     </application>
 
 </manifest>

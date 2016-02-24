@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -80,7 +81,8 @@ public class LaporHarga extends BaseActivityLocation {
     EditText edit_jumlahkomoditas;
     @Bind(R.id.edit_koordinatlokasi)
     EditText edit_kordinatlokasi;
-
+    @Bind(R.id.edit_keterangan)
+    EditText edit_keterangan;
 
     @Bind(R.id.tombol_setelpeta)
     ImageButton tombolsetelpeta;
@@ -89,9 +91,12 @@ public class LaporHarga extends BaseActivityLocation {
 
     @Bind(R.id.tombol_simpandraft)
     Button tomboldraft;
+    @Bind(R.id.layout_keterangan)
+    LinearLayout layout_keterangan;
 
     @Bind(R.id.layout_jumlahkomoditas)
     LinearLayout layout_jumlahkomoditas;
+
 
 
     private String idkomoditas = "";
@@ -101,6 +106,7 @@ public class LaporHarga extends BaseActivityLocation {
     private String namalokasi = "";
     private String latitude = "";
     private String longitude = "";
+    private String keterangan ="";
 
 
     //database
@@ -163,6 +169,7 @@ public class LaporHarga extends BaseActivityLocation {
     private String datasimpan_lng = "";
     private String datasimpan_nohp = "";
     private String datasimpan_quantity = "";
+    private String datasimpan_keterangan = "";
 
 
     private boolean statusKirim = false;
@@ -185,7 +192,17 @@ public class LaporHarga extends BaseActivityLocation {
         aksibar = LaporHarga.this.getSupportActionBar();
         assert aksibar != null;
         aksibar.setDisplayHomeAsUpEnabled(true);
-        aksibar.setTitle(R.string.lapor_hargajudul);
+        TextView msgTextView = (TextView) findViewById(R.id.laporhargajudul);
+
+
+        if (kode_kirimKomoditas == Konstan.KODE_KIRIMHARGA_AKT) {
+            aksibar.setTitle(R.string.lapor_hargajudul);
+            msgTextView.setText(R.string.lapor_keterangan);
+        } else {
+            aksibar.setTitle(R.string.jual_hargajudul);
+            msgTextView.setText(R.string.lapor_keterangan1);
+        }
+
 
         mRealm = Realm.getInstance(LaporHarga.this);
         mParseran = new Parseran(LaporHarga.this);
@@ -194,8 +211,10 @@ public class LaporHarga extends BaseActivityLocation {
 
         if (kode_kirimKomoditas == Konstan.KODE_KIRIMHARGA_AKT) {
             layout_jumlahkomoditas.setVisibility(View.GONE);
+            layout_keterangan.setVisibility(View.GONE);
         } else {
             layout_jumlahkomoditas.setVisibility(View.VISIBLE);
+            layout_keterangan.setVisibility(View.VISIBLE);
         }
 
 
@@ -501,8 +520,13 @@ public class LaporHarga extends BaseActivityLocation {
 
         if (kode_kirimKomoditas == Konstan.KODE_KIRIMHARGAJUALKOMO_AKT) {
             jumlahkomoditas = edit_jumlahkomoditas.getText().toString();
+            keterangan = edit_keterangan.getText().toString();
+            if(keterangan.equals("")){
+                keterangan = "0";
+            }
         } else {
             jumlahkomoditas = "0";
+            keterangan = "0";
         }
 
         namalokasi = alamatgabungan;
@@ -551,7 +575,7 @@ public class LaporHarga extends BaseActivityLocation {
         longitude = "" + longitudepengguna;
 
         simpanDatabase(true, false, idkomoditas, namakomoditas, latitude, longitude,
-                namalokasi, datakirim_nohp, hargakomoditas, jumlahkomoditas);
+                namalokasi, datakirim_nohp, hargakomoditas, jumlahkomoditas,keterangan);
     }
 
 
@@ -593,6 +617,7 @@ public class LaporHarga extends BaseActivityLocation {
                 hargaKomoditasKirim.setNohp(datakirim_nohp);
                 hargaKomoditasKirim.setHarga(hargakomoditas);
                 hargaKomoditasKirim.setQuantity(jumlahkomoditas);
+                hargaKomoditasKirim.setKeterangan(keterangan);
 
                 return mParseran.konversiPojoKirimHarga(hargaKomoditasKirim);
             }
@@ -664,6 +689,7 @@ public class LaporHarga extends BaseActivityLocation {
             datasimpan_lng = hargaKomoditasLapor.getLng() + "";
             datasimpan_nohp = hargaKomoditasLapor.getNohp();
             datasimpan_quantity = hargaKomoditasLapor.getQuantity() + "";
+            datasimpan_keterangan = hargaKomoditasLapor.getKeterangan() + "";
 
             Log.w("HASIL HARGA", datasimpan_id + " harga " + datasimpan_harga + " jumlah "
                     + datasimpan_quantity + " lat " + datasimpan_lat + " lng " + datasimpan_lng);
@@ -672,7 +698,7 @@ public class LaporHarga extends BaseActivityLocation {
 
                 //simpan ke database riwayat
                 simpanDatabase(false, true, datasimpan_id, namakomoditas, datasimpan_lat,
-                        datasimpan_lng, namalokasi, datasimpan_nohp, datasimpan_harga, datasimpan_quantity);
+                        datasimpan_lng, namalokasi, datasimpan_nohp, datasimpan_harga, datasimpan_quantity, datasimpan_keterangan);
 
             } else {
                 //gagal kirim data laporan
@@ -692,7 +718,7 @@ public class LaporHarga extends BaseActivityLocation {
     //SIMPAN KE DALAM DATABASE
     private void simpanDatabase(boolean isDraft, boolean isKirim, String id, String namakomoditas, String lats,
                                 String lngs, String alamatkomods, String nohps,
-                                String hargas, String quantitis) {
+                                String hargas, String quantitis, String keterangan) {
 
 
         RMDataRiwayat rmDataRiwayat = new RMDataRiwayat();
@@ -704,6 +730,7 @@ public class LaporHarga extends BaseActivityLocation {
         rmDataRiwayat.setNohp(nohps);
         rmDataRiwayat.setHarga(hargas);
         rmDataRiwayat.setQuantity(quantitis);
+        rmDataRiwayat.setKeterangan(keterangan);
         rmDataRiwayat.setIsKirim(isKirim);
         rmDataRiwayat.setIsDraft(isDraft);
 
@@ -873,6 +900,7 @@ public class LaporHarga extends BaseActivityLocation {
             KomoditasItem komoditasItem = mListKomoditasItem.get(i);
             idkomoditas = komoditasItem.getId();
             namakomoditas = komoditasItem.getName();
+
         }
 
         @Override

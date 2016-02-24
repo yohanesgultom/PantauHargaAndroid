@@ -15,9 +15,8 @@ public class HargaKomoditasItemKomparator {
     private int price = 0;
     private  int type = 0;
     private String jaraklokasi = "";
-    private String description = "";
-    private Date lastUpdated = new Date();
-
+    private String keterangan="";
+    private Date lastUpdated= new Date();
     public HargaKomoditasItemKomparator() {
     }
 
@@ -29,6 +28,13 @@ public class HargaKomoditasItemKomparator {
         this.barang = barang;
     }
 
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
     public String getLatitude() {
         return latitude;
     }
@@ -53,6 +59,14 @@ public class HargaKomoditasItemKomparator {
         this.nohp = nohp;
     }
 
+    public String getKeterangan() {
+        return keterangan;
+    }
+
+    public void setKeterangan(String keterangan) {
+        this.keterangan = keterangan;
+    }
+
     public int getPrice() {
         return price;
     }
@@ -67,22 +81,6 @@ public class HargaKomoditasItemKomparator {
 
     public void setType(int type) {
         this.type = type;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 
 
