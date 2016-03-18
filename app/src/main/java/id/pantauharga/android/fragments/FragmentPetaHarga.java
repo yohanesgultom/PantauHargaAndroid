@@ -75,7 +75,11 @@ public class FragmentPetaHarga extends Fragment {
     @Bind(R.id.teks_nomortelpon)
     TextView teks_telponkomoditas;
     @Bind(R.id.tombol_navigasi)
-    FloatingActionButton tombolnavigasikan;
+    FloatingActionButton btnNavigasi;
+    @Bind(R.id.tombol_telepon)
+    FloatingActionButton btnTelepon;
+    @Bind(R.id.tombol_sms)
+    FloatingActionButton btnSms;
 
     //untuk menampilkan marker posisi pengguna
     private LatLng kordinatsaya = null;
@@ -118,7 +122,7 @@ public class FragmentPetaHarga extends Fragment {
     private String init_namakomoditas = "";
     private int init_hargakomoditas = 0;
     private int init_type = 0;
-    private String init_keterangan ="";
+    private String init_keterangan = "";
     private String str_formathargakomoditas = "0";
     private String init_alamatkomoditas = "";
     private String init_telponkomoditas = "";
@@ -138,7 +142,10 @@ public class FragmentPetaHarga extends Fragment {
 
         mapfragment = (SupportMapFragment) FragmentPetaHarga.this.getChildFragmentManager().findFragmentById(R.id.map);
 
-        tombolnavigasikan.setOnClickListener(listenertombolfloat);
+        btnNavigasi.setOnClickListener(listenerNavigasi);
+        btnTelepon.setOnClickListener(listenerTelepon);
+        btnSms.setOnClickListener(listenerSms);
+
         teks_alamatkomoditas.setVisibility(View.GONE);
         teks_telponkomoditas.setVisibility(View.GONE);
         teks_keterangan.setVisibility(View.GONE);
@@ -170,7 +177,9 @@ public class FragmentPetaHarga extends Fragment {
             EventBus.getDefault().unregister(FragmentPetaHarga.this);
         }
     }
+
     public void displayInfo(HargaKomoditasItemKomparator itemloks) {
+
         init_namakomoditas = itemloks.getBarang();
         init_hargakomoditas = itemloks.getPrice();
         init_telponkomoditas = itemloks.getNohp();
@@ -197,11 +206,16 @@ public class FragmentPetaHarga extends Fragment {
             String teksets = "Telp : " + init_telponkomoditas;
             teks_telponkomoditas.setText(teksets);
             teks_telponkomoditas.setVisibility(View.VISIBLE);
+            btnTelepon.setVisibility(View.VISIBLE);
+            btnSms.setVisibility(View.VISIBLE);
         } else {
             String teksets = "Telp : -";
             teks_telponkomoditas.setText(teksets);
             teks_telponkomoditas.setVisibility(View.GONE);
+            btnTelepon.setVisibility(View.GONE);
+            btnSms.setVisibility(View.GONE);
         }
+
         if (init_keterangan != null && !init_keterangan.isEmpty()) {
             teks_keterangan.setText("Keterangan : \n" + init_keterangan);
             teks_keterangan.setVisibility(View.VISIBLE);
@@ -435,19 +449,17 @@ public class FragmentPetaHarga extends Fragment {
                 lokitem = mListKomoHargaKomparator.get(i);
                 loops_namakomoditas = lokitem.getBarang();
                 loops_type = lokitem.getType();
-                String namakomo ="";
-                int icon = 0 ;
-                if (loops_type == 2){
-                    namakomo = loops_namakomoditas+"(B)";
-                    icon =R.drawable.ic_buy;
-                }
-                else if (loops_type == 1) {
-                    namakomo = loops_namakomoditas+"(J)";
-                    icon =R.drawable.ic_sell;
-                }
-                else {
-                    namakomo = loops_namakomoditas+"(P)";
-                    icon =R.drawable.ic_pantau;
+                String namakomo = "";
+                int icon = 0;
+                if (loops_type == 2) {
+                    namakomo = loops_namakomoditas + "(B)";
+                    icon = R.drawable.ic_buy;
+                } else if (loops_type == 1) {
+                    namakomo = loops_namakomoditas + "(J)";
+                    icon = R.drawable.ic_sell;
+                } else {
+                    namakomo = loops_namakomoditas + "(P)";
+                    icon = R.drawable.ic_pantau;
                 }
 
                 dolatitude = Double.valueOf(lokitem.getLatitude());
@@ -465,12 +477,12 @@ public class FragmentPetaHarga extends Fragment {
                 hashmapListHarga.put(markeradd, lokitem);
             }
 
-            tombolnavigasikan.setVisibility(View.VISIBLE);
+            btnNavigasi.setVisibility(View.VISIBLE);
 
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            tombolnavigasikan.setVisibility(View.GONE);
+            btnNavigasi.setVisibility(View.GONE);
         }
     }
 
@@ -507,16 +519,16 @@ public class FragmentPetaHarga extends Fragment {
 
                 loops_namakomoditas = lokitem.getBarang();
                 loops_type = lokitem.getType();
-                String namakomo ="";
-                int icon2 =0;
-                if (loops_type == 2){
-                    namakomo = loops_namakomoditas+"(B)";
-                    icon2 =R.drawable.ic_buy;
-                }else if (loops_type == 1) {
-                    namakomo = loops_namakomoditas+"(J)";
-                    icon2 =R.drawable.ic_sell;
-                }else  {
-                    namakomo = loops_namakomoditas+"(P)";
+                String namakomo = "";
+                int icon2 = 0;
+                if (loops_type == 2) {
+                    namakomo = loops_namakomoditas + "(B)";
+                    icon2 = R.drawable.ic_buy;
+                } else if (loops_type == 1) {
+                    namakomo = loops_namakomoditas + "(J)";
+                    icon2 = R.drawable.ic_sell;
+                } else {
+                    namakomo = loops_namakomoditas + "(P)";
                     icon2 = R.drawable.ic_pantau;
                 }
                 dolatitude = Double.valueOf(lokitem.getLatitude());
@@ -552,12 +564,12 @@ public class FragmentPetaHarga extends Fragment {
                 hashmapListHarga.put(markeradd, lokitem);
             }
 
-            tombolnavigasikan.setVisibility(View.VISIBLE);
+            btnNavigasi.setVisibility(View.VISIBLE);
 
             markerklik.showInfoWindow();
         } catch (Exception ex) {
             ex.printStackTrace();
-            tombolnavigasikan.setVisibility(View.GONE);
+            btnNavigasi.setVisibility(View.GONE);
         }
     }
 
@@ -576,12 +588,12 @@ public class FragmentPetaHarga extends Fragment {
                 //task ambil geocoder
                 taskAmbilGeocoder(latpeta, longipeta);
 
-                tombolnavigasikan.setVisibility(View.VISIBLE);
+                btnNavigasi.setVisibility(View.VISIBLE);
 
             } catch (Exception ex) {
                 ex.printStackTrace();
 
-                tombolnavigasikan.setVisibility(View.GONE);
+                btnNavigasi.setVisibility(View.GONE);
             }
 
 
@@ -590,11 +602,11 @@ public class FragmentPetaHarga extends Fragment {
     };
 
 
-    View.OnClickListener listenertombolfloat = new View.OnClickListener() {
+    View.OnClickListener listenerNavigasi = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
 
-            String kordinatpetakirim = latpeta + "," + longipeta;
+            String kordinatpetakirim = init_latitudekomoditas + "," + init_longitudekomoditas;
             String kordinatsaya = latitudesaya + "," + longitudesaya;
             String alamatpeta = "http://maps.google.com/maps?saddr=" + kordinatsaya + "&daddr=" + kordinatpetakirim + "&mode=driving";
 
@@ -616,6 +628,35 @@ public class FragmentPetaHarga extends Fragment {
                 FragmentPetaHarga.this.startActivity(intentpeta);
             }
 
+        }
+    };
+
+    View.OnClickListener listenerTelepon = new View.OnClickListener() {
+        public void onClick(View view) {
+            if (init_telponkomoditas.length() > 4) {
+                Intent in = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + init_telponkomoditas));
+                try {
+                    startActivity(in);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(FragmentPetaHarga.this.getActivity(), "Call Activity is not founded", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
+
+    View.OnClickListener listenerSms = new View.OnClickListener() {
+        public void onClick(View view) {
+            if (init_telponkomoditas.length() > 4) {
+                Intent in = new Intent(Intent.ACTION_VIEW);
+                in.setType("vnd.android-dir/mms-sms");
+                in.putExtra("address", init_telponkomoditas);
+                in.putExtra("sms_body","#pantauharga.id");
+                try {
+                    startActivity(in);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(FragmentPetaHarga.this.getActivity(), "Call Activity is not founded", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     };
 
