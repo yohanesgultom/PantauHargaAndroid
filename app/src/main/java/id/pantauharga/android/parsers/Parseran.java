@@ -19,24 +19,23 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import okio.BufferedSource;
-import okio.Okio;
+import id.pantauharga.android.modelgson.User;
+import id.pantauharga.android.modelgson.VerifyUser;
 import id.pantauharga.android.Konstan;
-import id.pantauharga.android.R;
 import id.pantauharga.android.modelgson.HargaKomoditasItem;
 import id.pantauharga.android.modelgson.HargaKomoditasItemKomparator;
 import id.pantauharga.android.modelgson.KomoditasItem;
 import id.pantauharga.android.modelgsonkirim.HargaKomoditasCek;
 import id.pantauharga.android.modelgsonkirim.HargaKomoditasKirim;
-import id.pantauharga.android.modelgsonkirim.LoginKirim;
-import id.pantauharga.android.modelgsonkirim.RegisterKirim;
+import okio.BufferedSource;
+import okio.Okio;
+import id.pantauharga.android.R;
 
 /**
  * Created by Gulajava Ministudio on 11/5/15.
@@ -201,42 +200,6 @@ public class Parseran {
     }
 
 
-    //KONVERSI POJO KE JSON LOGIN
-    public String konversiPojoJsonLogin(LoginKirim loginKirim) {
-
-        String json;
-
-        try {
-
-            json = JSON.std.asString(loginKirim);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            json = "";
-        }
-
-        return json;
-    }
-
-
-    //KONVERSI POJO KE JSON REGISTRASI
-    public String konversiPojoRegistrasi(RegisterKirim registerKirim) {
-
-        String json;
-
-        try {
-
-            json = JSON.std.asString(registerKirim);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            json = "";
-        }
-
-        return json;
-    }
-
-
     //KONVERSI POJO KE JSON KIRIM HARGA
     public String konversiPojoKirimHarga(HargaKomoditasKirim hargaKomoditasKirim) {
 
@@ -247,6 +210,50 @@ public class Parseran {
         } catch (Exception ex) {
             ex.getMessage();
             json = "";
+        }
+
+        return json;
+    }
+
+    //KONVERSI POJO KE JSON USER
+    public String konversiPojoUpdateUser(User user) {
+
+        String json;
+
+        try {
+            json = JSON.std.asString(user);
+        } catch (Exception ex) {
+            ex.getMessage();
+            json = "";
+        }
+
+        return json;
+    }
+
+    //KONVERSI POJO KE JSON KIRIM HARGA
+    public String konversiPojoVerifyUser(VerifyUser verifyUser) {
+
+        String json;
+
+        try {
+            json = JSON.std.asString(verifyUser);
+        } catch (Exception ex) {
+            ex.getMessage();
+            json = "";
+        }
+
+        return json;
+    }
+
+    public String konversiPojoKirimHargarating(HargaKomoditasKirim hargaKomoditasKirim6) {
+
+        String json;
+
+        try {
+            json = JSON.std.asString(hargaKomoditasKirim6);
+        } catch (Exception ex) {
+            ex.getMessage();
+            json = "error";
         }
 
         return json;
@@ -266,8 +273,9 @@ public class Parseran {
         String nohp = "";
         int price = 0;
         int type = 0;
-        String keterangan="";
+        String keterangan = "90";
         float jaraklokasi = 0;
+        String totalrating = "";
 
         Location lokasicekkomoditas = new Location("");
 
@@ -285,8 +293,8 @@ public class Parseran {
                     longitude = hargaKomoditasItem.getLongitude();
                     nohp = hargaKomoditasItem.getNohp();
                     price = hargaKomoditasItem.getPrice();
-                    keterangan = hargaKomoditasItem.getKeterangan();
-
+                    keterangan = hargaKomoditasItem.getDescription();
+                    totalrating = hargaKomoditasItem.getTotalrating();
                     type = hargaKomoditasItem.getType();
 
                     double dolatitude = Double.valueOf(latitude);
@@ -306,6 +314,7 @@ public class Parseran {
                     hargaKomoditasItemKomparator.setKeterangan(keterangan);
                     hargaKomoditasItemKomparator.setLastUpdated(df.parse(hargaKomoditasItem.getLastUpdated()));
                     hargaKomoditasItemKomparator.setType(type);
+                    hargaKomoditasItemKomparator.setTotalrating(totalrating);
                     hargaKomoditasItemKomparator.setJaraklokasi(jaraklokasi + "");
 
                     Log.w("HARGA BARANG SIMPAN ", "" + barang + " " + price);

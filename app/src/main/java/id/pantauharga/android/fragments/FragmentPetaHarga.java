@@ -27,7 +27,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,6 +42,8 @@ import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import id.pantauharga.android.Konstan;
 import id.pantauharga.android.R;
+import id.pantauharga.android.aktivitas.MenuUtama;
+import id.pantauharga.android.aktivitas.Rating;
 import id.pantauharga.android.messagebus.MessageAktFrag;
 import id.pantauharga.android.modelgson.HargaKomoditasItem;
 import id.pantauharga.android.modelgson.HargaKomoditasItemKomparator;
@@ -51,7 +52,7 @@ import id.pantauharga.android.parsers.Parseran;
 /**
  * Created by Gulajava Ministudio on 11/5/15.
  */
-public class FragmentPetaHarga extends Fragment {
+public class FragmentPetaHarga extends Fragment  {
 
 
     //GOOGLE MAPS
@@ -61,7 +62,7 @@ public class FragmentPetaHarga extends Fragment {
     private static final int paddingBottom_dp = 140;
     private static int paddingTop_px = 0;
     private static int paddingBottom_px = 0;
-
+    private MenuUtama menuu;
     @Bind(R.id.teks_namakomoditas)
     TextView teks_namakomoditas;
     @Bind(R.id.teks_keterangan)
@@ -72,6 +73,8 @@ public class FragmentPetaHarga extends Fragment {
     TextView teks_hargakomoditas;
     @Bind(R.id.teks_alamatlokasi)
     TextView teks_alamatkomoditas;
+    @Bind(R.id.teks_rate)
+    TextView teks_rate;
     @Bind(R.id.teks_nomortelpon)
     TextView teks_telponkomoditas;
     @Bind(R.id.tombol_navigasi)
@@ -80,6 +83,8 @@ public class FragmentPetaHarga extends Fragment {
     FloatingActionButton btnTelepon;
     @Bind(R.id.tombol_sms)
     FloatingActionButton btnSms;
+    @Bind(R.id.tombol_rating)
+    FloatingActionButton btnRating;
 
     //untuk menampilkan marker posisi pengguna
     private LatLng kordinatsaya = null;
@@ -128,6 +133,7 @@ public class FragmentPetaHarga extends Fragment {
     private String init_telponkomoditas = "";
     private String init_latitudekomoditas = "0";
     private String init_longitudekomoditas = "0";
+    private String init_rate = "0";
 
 
     @Nullable
@@ -144,12 +150,11 @@ public class FragmentPetaHarga extends Fragment {
 
         btnNavigasi.setOnClickListener(listenerNavigasi);
         btnTelepon.setOnClickListener(listenerTelepon);
+        btnRating.setOnClickListener(listenerRating);
         btnSms.setOnClickListener(listenerSms);
-
         teks_alamatkomoditas.setVisibility(View.GONE);
         teks_telponkomoditas.setVisibility(View.GONE);
         teks_keterangan.setVisibility(View.GONE);
-
 
         return view;
     }
@@ -179,13 +184,13 @@ public class FragmentPetaHarga extends Fragment {
     }
 
     public void displayInfo(HargaKomoditasItemKomparator itemloks) {
-
         init_namakomoditas = itemloks.getBarang();
         init_hargakomoditas = itemloks.getPrice();
         init_telponkomoditas = itemloks.getNohp();
         init_latitudekomoditas = itemloks.getLatitude();
         init_longitudekomoditas = itemloks.getLongitude();
         init_keterangan = itemloks.getKeterangan();
+        init_rate = itemloks.getTotalrating();
         init_last_updated = itemloks.getLastUpdated();
         init_type = itemloks.getType();
         String namakomoditastype = "";
@@ -201,7 +206,6 @@ public class FragmentPetaHarga extends Fragment {
 
         str_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(init_hargakomoditas) + ",-";
         teks_hargakomoditas.setText(str_formathargakomoditas);
-
         if (init_telponkomoditas.length() > 4) {
             String teksets = "Telp : " + init_telponkomoditas;
             teks_telponkomoditas.setText(teksets);
@@ -215,13 +219,20 @@ public class FragmentPetaHarga extends Fragment {
             btnTelepon.setVisibility(View.GONE);
             btnSms.setVisibility(View.GONE);
         }
-
+        //Toast.makeText(FragmentPetaHarga.this.getActivity()String.valueOf(itemloks.getKeterangan()),Toast.LENGTH_SHORT).show();
         if (init_keterangan != null && !init_keterangan.isEmpty()) {
-            teks_keterangan.setText("Keterangan : \n" + init_keterangan);
+            teks_keterangan.setText("Keterangan : " + init_keterangan);
             teks_keterangan.setVisibility(View.VISIBLE);
         } else {
             teks_keterangan.setText("Keterangan : -");
             teks_keterangan.setVisibility(View.GONE);
+        }
+        if (init_rate != null && !init_rate.isEmpty()) {
+            teks_rate.setText("Rating User : " + init_rate);
+            teks_rate.setVisibility(View.VISIBLE);
+        } else {
+            teks_rate.setText("Rating User : -");
+            teks_rate.setVisibility(View.GONE);
         }
         teks_lastupdate.setText("Last Updated : " + formatDate.format(init_last_updated));
     }
@@ -658,6 +669,29 @@ public class FragmentPetaHarga extends Fragment {
                 }
             }
         }
+    };
+
+    View.OnClickListener listenerRating = new View.OnClickListener() {
+
+        public void onClick(View view) {
+            if (init_telponkomoditas.length() > 4) {
+                try {
+                    Intent myintent = new Intent(getActivity(), Rating.class);
+                    myintent.putExtra("nama", init_namakomoditas);
+                    myintent.putExtra("alamat", alamatgabungan);
+                    myintent.putExtra("harga1", init_hargakomoditas);
+                    myintent.putExtra("telpon", init_telponkomoditas);
+                    myintent.putExtra("lat", init_latitudekomoditas);
+                    myintent.putExtra("lng", init_longitudekomoditas);
+                    myintent.putExtra("keterangan", init_keterangan);
+                    startActivity(myintent);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(FragmentPetaHarga.this.getActivity(), "Rating error", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
+
     };
 
 

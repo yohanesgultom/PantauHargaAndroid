@@ -25,16 +25,16 @@ import java.lang.reflect.Field;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import io.realm.Realm;
-import io.realm.RealmBaseAdapter;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 import id.pantauharga.android.Konstan;
-import id.pantauharga.android.R;
 import id.pantauharga.android.adapters.ViewHolderan;
 import id.pantauharga.android.databases.RMDataRiwayat;
 import id.pantauharga.android.dialogs.DialogHapusAllData;
 import id.pantauharga.android.parsers.Parseran;
+import io.realm.Realm;
+import io.realm.RealmBaseAdapter;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+import id.pantauharga.android.R;
 
 /**
  * Created by Gulajava Ministudio on 11/11/15.
@@ -106,6 +106,7 @@ public class LaporRiwayat extends AppCompatActivity {
 
         if (isDataAda) {
             menuhapusriwayat.setVisible(true).setEnabled(true);
+
         } else {
             menuhapusriwayat.setVisible(false).setEnabled(false);
         }
@@ -204,7 +205,7 @@ public class LaporRiwayat extends AppCompatActivity {
 
                 String bulatanharga = mParseran.pembulatanBilangan(rmDataRiwayat.getHarga(), 0);
                 int bulatanhargaint = Integer.valueOf(bulatanharga);
-                String hargapisah = "Rp " + mParseran.formatAngkaPisah(bulatanhargaint) + " per kg";
+                String hargapisah = "Rp. " + mParseran.formatAngkaPisah(bulatanhargaint) + "/Kg";
 
                 viewHolderan.getTeks_namakomoditas().setText(namakomoditas);
                 viewHolderan.getTeks_alamatkomoditas().setText(namalokasi);

@@ -11,7 +11,10 @@ public class HargaKomoditasKirim {
     private String nohp = "";
     private String harga = "";
     private String quantity = "";
-    private String keterangan="";
+    private String keterangan = "";
+    private String rating = "";
+    private String inputer = "";
+
     public HargaKomoditasKirim() {
     }
 
@@ -71,4 +74,19 @@ public class HargaKomoditasKirim {
         this.keterangan = keterangan;
     }
 
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getInputer() {
+        return inputer;
+    }
+
+    public void setInputer(String inputer) {
+        this.inputer = inputer;
+    }
 }

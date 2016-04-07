@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="id.pantauharga.android"
     android:installLocation="auto"
-    android:versionCode="2"
-    android:versionName="1.0.0">
+    android:versionCode="10"
+    android:versionName="1.1.7">
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -17,6 +17,7 @@
         android:glEsVersion="0x00020000"
         android:required="true" />
 
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -26,7 +27,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
@@ -36,7 +37,7 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".aktivitas.Loading"
+            android:name="id.pantauharga.android.aktivitas.Loading"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeCompatLoading">
@@ -47,7 +48,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".aktivitas.MenuUtama"
+            android:name="id.pantauharga.android.aktivitas.MenuUtama"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -57,8 +58,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".aktivitas.LoginRegistersPengguna"
-            android:label="@string/login_register_datapengguna"
+            android:name="id.pantauharga.android.aktivitas.SSOLogin"
+            android:label="@string/sso_login_title"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
@@ -68,7 +69,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".aktivitas.LaporHarga"
+            android:name="id.pantauharga.android.aktivitas.LaporHarga"
             android:label="@string/lapor_hargajudul"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
@@ -79,7 +80,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".aktivitas.PesanKomoditas"
+            android:name="id.pantauharga.android.aktivitas.PesanKomoditas"
             android:label="@string/ic_teks_menu_belikomoditas"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
@@ -90,7 +91,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".aktivitas.PetaAmbilLokasi"
+            android:name="id.pantauharga.android.aktivitas.PetaAmbilLokasi"
             android:label="@string/petaambil_judulhalaman"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
@@ -101,7 +102,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".aktivitas.LaporRiwayat"
+            android:name="id.pantauharga.android.aktivitas.LaporRiwayat"
             android:label="@string/riwayat_judul"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
@@ -112,7 +113,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".aktivitas.LaporHargaEdit"
+            android:name="id.pantauharga.android.aktivitas.LaporHargaEdit"
             android:label="@string/riwayat_judul"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
@@ -123,7 +124,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".aktivitas.TentangApl"
+            android:name="id.pantauharga.android.aktivitas.Rating"
+            android:label="@string/riwayat_judul"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.NOLAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="id.pantauharga.android.aktivitas.TentangApl"
             android:label="@string/tentangapl_judul"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
@@ -132,6 +144,15 @@
 
                 <category android:name="android.intent.category.NOLAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="id.pantauharga.android.aktivitas.Notification"
+            android:label="Details of notification"
+            android:parentActivityName="id.pantauharga.android.aktivitas.MenuUtama"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="id.pantauharga.android.aktivitas.MenuUtama" />
         </activity>
 
         <meta-data
@@ -143,10 +164,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB3QJMaUF6xKYlX7xNicslomu_lktQrnIc" />
-
-        <activity
-            android:name=".aktivitas.Scan_qr"
-            android:label="@string/title_activity_scan_qr"></activity>
     </application>
 
 </manifest>

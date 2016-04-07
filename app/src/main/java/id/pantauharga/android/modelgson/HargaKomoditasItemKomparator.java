@@ -13,12 +13,12 @@ public class HargaKomoditasItemKomparator {
     private String longitude = "";
     private String nohp = "";
     private int price = 0;
-    private  int type = 0;
+    private int type = 0;
     private String jaraklokasi = "";
     private String keterangan="";
+    private String totalrating;
     private Date lastUpdated= new Date();
-    public HargaKomoditasItemKomparator() {
-    }
+    public HargaKomoditasItemKomparator() {}
 
     public String getBarang() {
         return barang;
@@ -35,6 +35,7 @@ public class HargaKomoditasItemKomparator {
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+
     public String getLatitude() {
         return latitude;
     }
@@ -75,6 +76,7 @@ public class HargaKomoditasItemKomparator {
         this.price = price;
     }
 
+
     public int getType() {
         return type;
     }
@@ -83,7 +85,6 @@ public class HargaKomoditasItemKomparator {
         this.type = type;
     }
 
-
     public String getJaraklokasi() {
         return jaraklokasi;
     }
@@ -91,12 +92,12 @@ public class HargaKomoditasItemKomparator {
     public void setJaraklokasi(String jaraklokasi) {
         this.jaraklokasi = jaraklokasi;
     }
-
+    public  String getTotalrating(){return  totalrating;}
+    public void setTotalrating(String totalrating) {this.totalrating = totalrating;}
     //KOMPARATOR BERDASARKAN LOKASI TERDEKAT
     public static Comparator<HargaKomoditasItemKomparator> komparatorJarakTerdekat = new Comparator<HargaKomoditasItemKomparator>() {
         @Override
         public int compare(HargaKomoditasItemKomparator hargaKomoditasItem1, HargaKomoditasItemKomparator hargaKomoditasItem2) {
-
 
             double dojarak1 = Double.valueOf(hargaKomoditasItem1.getJaraklokasi());
             double dojarak2 = Double.valueOf(hargaKomoditasItem2.getJaraklokasi());
@@ -107,7 +108,6 @@ public class HargaKomoditasItemKomparator {
             return intjarak1 - intjarak2;
         }
     };
-
 
     //KOMPARATOR BERDASARKAN HARGA TERMURAH
     public static Comparator<HargaKomoditasItemKomparator> komparatorHargaMurah = new Comparator<HargaKomoditasItemKomparator>() {

@@ -43,18 +43,18 @@ import bolts.Task;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import id.pantauharga.android.databases.RMJsonData;
+import id.pantauharga.android.databases.RMLogin;
+import id.pantauharga.android.dialogs.DialogHapusDataIni;
+import id.pantauharga.android.dialogs.DialogOkKirimEdit;
+import id.pantauharga.android.internets.JacksonRequest;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import id.pantauharga.android.Konstan;
 import id.pantauharga.android.R;
 import id.pantauharga.android.databases.RMDataRiwayat;
-import id.pantauharga.android.databases.RMJsonData;
-import id.pantauharga.android.databases.RMLogin;
-import id.pantauharga.android.dialogs.DialogHapusDataIni;
-import id.pantauharga.android.dialogs.DialogOkKirimEdit;
 import id.pantauharga.android.internets.Apis;
-import id.pantauharga.android.internets.JacksonRequest;
 import id.pantauharga.android.internets.Volleys;
 import id.pantauharga.android.messagebus.MessageBusAktAkt;
 import id.pantauharga.android.modelgson.HargaKomoditasLapor;
@@ -80,6 +80,8 @@ public class LaporHargaEdit extends BaseActivityLocation {
     EditText edit_jumlahkomoditas;
     @Bind(R.id.edit_koordinatlokasi)
     EditText edit_kordinatlokasi;
+    @Bind(R.id.edit_keterangan)
+    EditText edit_keterangan;
 
 
     @Bind(R.id.tombol_setelpeta)
@@ -89,6 +91,8 @@ public class LaporHargaEdit extends BaseActivityLocation {
 
     @Bind(R.id.tombol_simpandraft)
     Button tomboldraft;
+    @Bind(R.id.layout_keterangan)
+    LinearLayout layout_keterangan;
 
     @Bind(R.id.layout_jumlahkomoditas)
     LinearLayout layout_jumlahkomoditas;
@@ -104,6 +108,7 @@ public class LaporHargaEdit extends BaseActivityLocation {
     private String namalokasi = "";
     private String latitude = "0";
     private String longitude = "0";
+    private String keterangan = "";
 
 
     //database
@@ -168,6 +173,7 @@ public class LaporHargaEdit extends BaseActivityLocation {
     private String datasimpan_lng = "";
     private String datasimpan_nohp = "";
     private String datasimpan_quantity = "";
+    private String datasimpan_keterangan = "";
 
 
     //BUNDEL DATA EDIT
@@ -204,16 +210,19 @@ public class LaporHargaEdit extends BaseActivityLocation {
 
         isAktJalan = true;
 
+
         if (kode_kirimKomoditas == Konstan.KODE_KIRIMHARGA_AKT) {
             layout_jumlahkomoditas.setVisibility(View.GONE);
+            layout_keterangan.setVisibility(View.GONE);
         } else {
             layout_jumlahkomoditas.setVisibility(View.VISIBLE);
+            layout_keterangan.setVisibility(View.VISIBLE);
         }
 
 
         edit_harga.addTextChangedListener(new Parseran.NumberTextWatcher(edit_harga));
         edit_kordinatlokasi.setEnabled(false);
-
+        edit_keterangan.setEnabled(false);
         //cek permisi lokasi tapi dengan jeda dulu
         Handler handler = new Handler();
         handler.postDelayed(jedamuatawal, 500);
@@ -229,7 +238,6 @@ public class LaporHargaEdit extends BaseActivityLocation {
             EventBus.getDefault().register(LaporHargaEdit.this);
         }
     }
-
 
     @Override
     protected void onPause() {
@@ -338,6 +346,7 @@ public class LaporHargaEdit extends BaseActivityLocation {
             hargakomoditas = rmDataRiwayat.getHarga();
             jumlahkomoditas = rmDataRiwayat.getQuantity();
             namalokasi = rmDataRiwayat.getAlamatkomoditas();
+            keterangan = rmDataRiwayat.getKeterangan();
             latitude = rmDataRiwayat.getLat();
             longitude = rmDataRiwayat.getLng();
             isKirim = rmDataRiwayat.isKirim();
@@ -370,6 +379,8 @@ public class LaporHargaEdit extends BaseActivityLocation {
 
         edit_jumlahkomoditas.setText(jumlahkomoditas);
 
+        edit_keterangan.setText(keterangan);
+
         setelEditTextLokasi(latitude + " , " + longitude);
         taskAmbilGeocoder(latitude, longitude);
 
@@ -378,13 +389,13 @@ public class LaporHargaEdit extends BaseActivityLocation {
             edit_harga.setEnabled(false);
             edit_jumlahkomoditas.setEnabled(false);
             edit_kordinatlokasi.setEnabled(false);
-
+            edit_keterangan.setEnabled(false);
             layout_tombolkirimdraft.setVisibility(View.GONE);
         } else {
             spinkomoditas.setEnabled(true);
             edit_harga.setEnabled(true);
             edit_jumlahkomoditas.setEnabled(true);
-
+            edit_keterangan.setEnabled(true);
             layout_tombolkirimdraft.setVisibility(View.VISIBLE);
         }
 
@@ -546,7 +557,7 @@ public class LaporHargaEdit extends BaseActivityLocation {
         namalokasi = alamatgabungan;
         latitude = "" + latitudepengguna;
         longitude = "" + longitudepengguna;
-
+        keterangan = edit_keterangan.getText().toString();
         boolean isValids = false;
 
         if (hargakomoditas.length() < 4) {
@@ -588,8 +599,10 @@ public class LaporHargaEdit extends BaseActivityLocation {
         latitude = "" + latitudepengguna;
         longitude = "" + longitudepengguna;
 
+        keterangan = edit_keterangan.getText().toString();
+
         simpanDatabase(true, false, idkomoditas, namakomoditas, latitude, longitude,
-                namalokasi, datakirim_nohp, hargakomoditas, jumlahkomoditas);
+                namalokasi, datakirim_nohp, hargakomoditas, jumlahkomoditas, keterangan);
     }
 
 
@@ -631,6 +644,7 @@ public class LaporHargaEdit extends BaseActivityLocation {
                 hargaKomoditasKirim.setNohp(datakirim_nohp);
                 hargaKomoditasKirim.setHarga(hargakomoditas);
                 hargaKomoditasKirim.setQuantity(jumlahkomoditas);
+                hargaKomoditasKirim.setKeterangan(keterangan);
 
                 return mParseran.konversiPojoKirimHarga(hargaKomoditasKirim);
             }
@@ -702,6 +716,7 @@ public class LaporHargaEdit extends BaseActivityLocation {
             datasimpan_lng = hargaKomoditasLapor.getLng() + "";
             datasimpan_nohp = hargaKomoditasLapor.getNohp();
             datasimpan_quantity = hargaKomoditasLapor.getQuantity() + "";
+            datasimpan_keterangan = hargaKomoditasLapor.getKeterangan() + "";
 
             Log.w("HASIL HARGA", datasimpan_id + " harga " + datasimpan_harga + " jumlah "
                     + datasimpan_quantity + " lat " + datasimpan_lat + " lng " + datasimpan_lng);
@@ -710,7 +725,7 @@ public class LaporHargaEdit extends BaseActivityLocation {
 
                 //simpan ke database riwayat
                 simpanDatabase(false, true, datasimpan_id, namakomoditas, datasimpan_lat,
-                        datasimpan_lng, namalokasi, datasimpan_nohp, datasimpan_harga, datasimpan_quantity);
+                        datasimpan_lng, namalokasi, datasimpan_nohp, datasimpan_harga, datasimpan_quantity, datasimpan_keterangan);
 
             } else {
                 //gagal kirim data laporan
@@ -729,8 +744,8 @@ public class LaporHargaEdit extends BaseActivityLocation {
 
     //SIMPAN KE DALAM DATABASE
     private void simpanDatabase(boolean isDraft, boolean isKirim, String id, String namakomoditas, String lats,
-                                String lngs, String alamatkomods, String nohps,
-                                String hargas, String quantitis) {
+                                String lngs, String alamat, String nohps,
+                                String hargas, String quantity, String keterangan) {
 
 
         mRealmQueryRiwayat = mRealm.where(RMDataRiwayat.class);
@@ -747,13 +762,13 @@ public class LaporHargaEdit extends BaseActivityLocation {
             rmDataRiwayat.setNamakomoditas(namakomoditas);
             rmDataRiwayat.setLat(lats);
             rmDataRiwayat.setLng(lngs);
-            rmDataRiwayat.setAlamatkomoditas(alamatkomods);
+            rmDataRiwayat.setAlamatkomoditas(alamat);
             rmDataRiwayat.setNohp(nohps);
             rmDataRiwayat.setHarga(hargas);
-            rmDataRiwayat.setQuantity(quantitis);
+            rmDataRiwayat.setQuantity(quantity);
             rmDataRiwayat.setIsKirim(isKirim);
             rmDataRiwayat.setIsDraft(isDraft);
-
+            rmDataRiwayat.setKeterangan(keterangan);
 
             mRealm.commitTransaction();
 
@@ -939,6 +954,7 @@ public class LaporHargaEdit extends BaseActivityLocation {
 
             mRealm.beginTransaction();
             rmDataRiwayat.removeFromRealm();
+            susunJsonKirimHarga1();
             mRealm.commitTransaction();
 
             Toast.makeText(LaporHargaEdit.this, R.string.riwayat_hapusdataselesai, Toast.LENGTH_SHORT).show();
@@ -1025,6 +1041,121 @@ public class LaporHargaEdit extends BaseActivityLocation {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    //SUSUN JSON DATA KIRIM HARGA
+    private void susunJsonKirimHarga1() {
+
+        //progress dialog
+        tampilProgressDialog("Mengirim data laporan...");
+
+        Task.callInBackground(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+
+                //{"id": "1034","lat":"-6.217","lng":"106.9","nohp":08123123,"harga":"20000","quantity":"30"}
+                HargaKomoditasKirim hargaKomoditasKirim = new HargaKomoditasKirim();
+                hargaKomoditasKirim.setId(idkomoditas);
+                hargaKomoditasKirim.setLat(latitude);
+                hargaKomoditasKirim.setLng(longitude);
+                hargaKomoditasKirim.setNohp(datakirim_nohp);
+                hargaKomoditasKirim.setHarga(hargakomoditas);
+                hargaKomoditasKirim.setQuantity(jumlahkomoditas);
+                hargaKomoditasKirim.setKeterangan(keterangan);
+
+                return mParseran.konversiPojoKirimHarga(hargaKomoditasKirim);
+            }
+        })
+
+                .continueWith(new Continuation<String, Object>() {
+                    @Override
+                    public Object then(Task<String> task) throws Exception {
+
+                        String hasiljsons = task.getResult();
+                        Log.w("HASIL PARSE CEK", "HASIL PARSE JSON CEK " + hasiljsons);
+
+                        //kirim ke server
+                        kirimDataServer1(hasiljsons);
+
+                        return null;
+                    }
+                }, Task.UI_THREAD_EXECUTOR);
+    }
+
+
+    //KIRIM DATA KE SERVER
+    private void kirimDataServer1(String jsonbody) {
+
+        String urls = Apis.getLinkDeleteRiwayat();
+        Map<String, String> headers = new HashMap<>();
+        Map<String, String> parameters = new HashMap<>();
+
+        JacksonRequest<HargaKomoditasLapor> jacksonRequest = Apis.postRequestHargaLapor(
+                urls,
+                headers,
+                parameters,
+                jsonbody,
+                new Response.Listener<HargaKomoditasLapor>() {
+                    @Override
+                    public void onResponse(HargaKomoditasLapor response) {
+
+                        Log.w("SUKSES", "SUKSES");
+                        if (isAktJalan) {
+                            cekHasilRespon1(response);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        error.printStackTrace();
+                        Log.w("GAGAL", "GAGAL");
+                        if (isAktJalan) {
+                            cekHasilRespon1(null);
+                        }
+                    }
+                }
+        );
+
+        Volleys.getInstance(LaporHargaEdit.this).addToRequestQueue(jacksonRequest);
+    }
+
+
+    //CEK HASIL RESPON DARI VOLLEY
+    private void cekHasilRespon1(HargaKomoditasLapor hargaKomoditasLapor) {
+
+        if (hargaKomoditasLapor != null) {
+
+            datasimpan_id = hargaKomoditasLapor.getId();
+            datasimpan_harga = hargaKomoditasLapor.getHarga() + "";
+            datasimpan_lat = hargaKomoditasLapor.getLat() + "";
+            datasimpan_lng = hargaKomoditasLapor.getLng() + "";
+            datasimpan_nohp = hargaKomoditasLapor.getNohp();
+            datasimpan_quantity = hargaKomoditasLapor.getQuantity() + "";
+            datasimpan_keterangan = hargaKomoditasLapor.getKeterangan() + "";
+
+            Log.w("HASIL HARGA", datasimpan_id + " harga " + datasimpan_harga + " jumlah "
+                    + datasimpan_quantity + " lat " + datasimpan_lat + " lng " + datasimpan_lng);
+
+            if (datakirim_nohp.length() > 1 && datakirim_nohp.length() > 3) {
+
+                //simpan ke database riwayat
+                //   simpanDatabase(false, true, datasimpan_id, namakomoditas, datasimpan_lat,
+                //         datasimpan_lng, namalokasi, datasimpan_nohp, datasimpan_harga, datasimpan_quantity);
+
+            } else {
+                //gagal kirim data laporan
+                munculSnackbar(R.string.lapor_gagalkirimdata);
+                isProsesKirim = false;
+                mProgressDialog.dismiss();
+            }
+        } else {
+            //gagal kirim data laporan
+            munculSnackbar(R.string.lapor_gagalkirimdata);
+            isProsesKirim = false;
+            mProgressDialog.dismiss();
         }
     }
 }

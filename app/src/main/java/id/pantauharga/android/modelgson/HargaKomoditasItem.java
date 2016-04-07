@@ -1,7 +1,5 @@
 package id.pantauharga.android.modelgson;
 
-import java.util.Date;
-
 /**
  * Created by Gulajava Ministudio on 11/6/15.
  */
@@ -12,9 +10,11 @@ public class HargaKomoditasItem {
     private String longitude = "";
     private String nohp = "";
     private int price = 0;
-    private int type = 0 ;
-    private String keterangan="";
-    private String lastUpdated="";
+    private int type = 0;
+    private String description = "";
+    private String lastUpdated = "";
+    private String totalrating ="";
+
     public HargaKomoditasItem() {
     }
 
@@ -58,6 +58,7 @@ public class HargaKomoditasItem {
     public void setPrice(int price) {
         this.price = price;
     }
+
     public int getType() {
         return type;
     }
@@ -65,21 +66,26 @@ public class HargaKomoditasItem {
     public void setType(int type) {
         this.type = type;
     }
-    public String getKeterangan() {
-        return keterangan;
+
+    public String getDescription() {
+        return description ;
     }
 
-    public void setKeterangan(String keterangan) {
-        this.keterangan = keterangan;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getLastUpdated() {
-        return lastUpdated;  }
+        return lastUpdated;
+    }
 
-    public void setLastUpdated(String lastUpdated)
-    {
+    public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+
+
+    public  String getTotalrating(){return  totalrating;}
+    public void setTotalrating(String totalrating) {this.totalrating = totalrating;}
 }
 
 

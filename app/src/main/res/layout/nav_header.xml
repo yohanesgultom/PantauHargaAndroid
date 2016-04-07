@@ -30,7 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="230dp"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/splash_description" />
 
 
         <LinearLayout
@@ -61,7 +62,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:singleLine="true"
-                android:text="Komoditas Pangan"
+                android:text="@string/sub_title"
                 android:textColor="@color/putih"
                 android:textSize="@dimen/ukuran16sp"/>
 

@@ -23,20 +23,11 @@
             android:id="@+id/menu_riwayatlaporan"
             android:icon="@drawable/ic_action_riwayatlaporan"
             android:title="@string/ic_teks_menu_riwayatlaporan"/>
-        <!--<item-->
-            <!--android:id="@+id/generate_qr"-->
-            <!--android:icon="@drawable/ic_action_riwayatlaporan"-->
-            <!--android:title="@string/ic_teks_generate_qr"/>-->
-        <!--<item-->
-            <!--android:id="@+id/scan_code"-->
-            <!--android:icon="@drawable/ic_action_riwayatlaporan"-->
-            <!--android:title= "@string/ic_teks_menu_can_code"/>-->
 
         <item
-            android:id="@+id/menu_data_pengguna"
+            android:id="@+id/menu_sso_login"
             android:icon="@drawable/ic_action_datapengguna"
             android:title="@string/ic_teks_menu_datapengguna"/>
-
 
         <item
             android:id="@+id/ic_tentang_app"

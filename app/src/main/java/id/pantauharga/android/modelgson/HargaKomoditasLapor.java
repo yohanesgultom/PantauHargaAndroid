@@ -11,8 +11,8 @@ public class HargaKomoditasLapor {
     private String lng = "";
     private String nohp = "";
     private String quantity = "";
-    private  String keterangan ="";
-
+    private String keterangan = "";
+    private String rating ="";
     public HargaKomoditasLapor() {
     }
 
@@ -72,6 +72,15 @@ public class HargaKomoditasLapor {
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
 
 
 }

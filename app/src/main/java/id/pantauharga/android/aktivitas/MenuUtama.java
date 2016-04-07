@@ -41,26 +41,26 @@ import bolts.Task;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import id.pantauharga.android.adapters.AdapterTabPager;
+import id.pantauharga.android.databases.RMJsonData;
+import id.pantauharga.android.databases.RMLogin;
+import id.pantauharga.android.dialogs.DialogUrutkanBerdasar;
+import id.pantauharga.android.fragments.FragmentPetaHarga;
+import id.pantauharga.android.messagebus.MessageAktFrag;
+import id.pantauharga.android.modelgson.HargaKomoditasItem;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import id.pantauharga.android.Konstan;
 import id.pantauharga.android.R;
-import id.pantauharga.android.adapters.AdapterTabPager;
-import id.pantauharga.android.databases.RMJsonData;
-import id.pantauharga.android.databases.RMLogin;
 import id.pantauharga.android.dialogs.DialogKomoditasCarian;
 import id.pantauharga.android.dialogs.DialogPeringatanLoginDulu;
-import id.pantauharga.android.dialogs.DialogUrutkanBerdasar;
 import id.pantauharga.android.fragments.FragmentListHarga;
-import id.pantauharga.android.fragments.FragmentPetaHarga;
 import id.pantauharga.android.internets.Apis;
 import id.pantauharga.android.internets.JacksonRequestArray;
 import id.pantauharga.android.internets.Volleys;
-import id.pantauharga.android.messagebus.MessageAktFrag;
 import id.pantauharga.android.messagebus.MessageBusAktAkt;
-import id.pantauharga.android.modelgson.HargaKomoditasItem;
 import id.pantauharga.android.modelgson.KomoditasItem;
 import id.pantauharga.android.modelgsonkirim.HargaKomoditasCek;
 import id.pantauharga.android.parsers.Parseran;
@@ -101,7 +101,6 @@ public class MenuUtama extends BaseActivityLocation {
     private Realm mRealm;
     private RealmQuery<RMLogin> mRealmQueryLogin;
     private RealmResults<RMLogin> mRealmResultsLogin;
-    private String username = "";
     private boolean isLogin = false;
 
     private RealmQuery<RMJsonData> mRealmQueryJson;
@@ -229,7 +228,7 @@ public class MenuUtama extends BaseActivityLocation {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        mProgressDialog.dismiss();
         isAktJalan = false;
         mRealm.close();
 
@@ -461,7 +460,6 @@ public class MenuUtama extends BaseActivityLocation {
                     //cek status kirim harga dengan cek login
                     if (isLogin) {
                         Intent intentlaporharga = new Intent(MenuUtama.this, LaporHarga.class);
-                        //intent pembeda masukan komoditas
                         intentlaporharga.putExtra(Konstan.TAG_INTENT_STATKIRIMHARGA, Konstan.KODE_KIRIMHARGAJUALKOMO_AKT);
                         MenuUtama.this.startActivity(intentlaporharga);
                     } else {
@@ -471,7 +469,7 @@ public class MenuUtama extends BaseActivityLocation {
                     break;
 
                 case R.id.menu_beli_komoditas:
-                    if(isLogin) {
+                    if (isLogin) {
                         Intent intentpesankomoditas = new Intent(MenuUtama.this, PesanKomoditas.class);
                         intentpesankomoditas.putExtra(Konstan.TAG_INTENT_STATKIRIMHARGA, Konstan.KODE_KIRIMHARGAPESANKOMO_AKT);
                         MenuUtama.this.startActivity(intentpesankomoditas);
@@ -481,23 +479,18 @@ public class MenuUtama extends BaseActivityLocation {
                     break;
 
                 case R.id.menu_riwayatlaporan:
-
                     Intent intentriwatat = new Intent(MenuUtama.this, LaporRiwayat.class);
                     MenuUtama.this.startActivity(intentriwatat);
                     break;
 
-                case R.id.menu_data_pengguna:
-
-                    Intent intentadminpengguna = new Intent(MenuUtama.this, LoginRegistersPengguna.class);
-                    MenuUtama.this.startActivity(intentadminpengguna);
-
+                case R.id.menu_sso_login:
+                    MenuUtama.this.startActivity(new Intent(MenuUtama.this, SSOLogin.class));
                     break;
 
                 case R.id.ic_tentang_app:
 
                     Intent intenttentangapl = new Intent(MenuUtama.this, TentangApl.class);
                     MenuUtama.this.startActivity(intenttentangapl);
-
                     break;
             }
         }
@@ -538,9 +531,7 @@ public class MenuUtama extends BaseActivityLocation {
         if (mRealmResultsLogin.size() > 0) {
 
             RMLogin rmLogin = mRealmResultsLogin.first();
-            username = rmLogin.getUsername();
-
-            isLogin = username.length() > 3;
+            isLogin = (rmLogin.getNohp() != null && !rmLogin.getNohp().isEmpty());
         } else {
             isLogin = false;
         }
@@ -655,8 +646,7 @@ public class MenuUtama extends BaseActivityLocation {
                 isDataAwalDiambil = true;
                 susunJsonKirimServer();
 
-            }
-            else {
+            } else {
 
                 //sebelumnya ga ada koneksi. cek permision lokasi dulu deh, sambil susun json
                 //ulangi ambil db json dan parse, cek permission
@@ -912,7 +902,7 @@ public class MenuUtama extends BaseActivityLocation {
 
 
     //TAMPILKAN DIALOG UNTUK DISURUH LOGIN DAHULU
-    private void tampilDialogLoginDulu() {
+    public void tampilDialogLoginDulu() {
 
         DialogPeringatanLoginDulu dialogPeringatanLoginDulu = new DialogPeringatanLoginDulu();
         FragmentTransaction fragmentTransaction = MenuUtama.this.getSupportFragmentManager().beginTransaction();
@@ -967,6 +957,4 @@ public class MenuUtama extends BaseActivityLocation {
             mViewPager.setCurrentItem(1);
         }
     };
-
-
 }

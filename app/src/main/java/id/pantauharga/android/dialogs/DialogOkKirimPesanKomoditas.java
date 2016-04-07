@@ -9,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.WindowManager;
 
 import id.pantauharga.android.R;
-import id.pantauharga.android.aktivitas.LaporHarga;
 import id.pantauharga.android.aktivitas.PesanKomoditas;
 
 /**

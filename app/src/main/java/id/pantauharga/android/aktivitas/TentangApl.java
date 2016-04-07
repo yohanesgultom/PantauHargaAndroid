@@ -81,7 +81,7 @@ public class TentangApl extends AppCompatActivity {
         tekspembuat5a.setText(Konstan.CREDIT_PEMBUAT_5a);
         tekspembuat1b.setText(Konstan.CREDIT_PEMBUAT_5b);
 
-        Glide.with(TentangApl.this).load(R.drawable.banana).into(gambarlogo);
+        Glide.with(TentangApl.this).load(R.drawable.logo).into(gambarlogo);
 
     }
 

@@ -5,6 +5,7 @@
     <string name="action_urutkan">Urutkan Daftar</string>
     <string name="action_lokasisaya">Cek Lokasi Saya</string>
     <string name="action_ambilkordinatbantuan">Bantuan Setel Koordinat</string>
+    <string name="action_save_profile">Save Profile</string>
 
     <string name="action_hapusriwayatsemua">Hapus Semua Riwayat</string>
     <string name="action_hapusriwayatini">Hapus riwayat ini</string>
@@ -20,6 +21,7 @@
     <string name="ic_teks_menu_datapengguna">Data Pengguna</string>
     <string name="ic_teks_menu_riwayatlaporan">Riwayat Laporan</string>
     <string name="ic_teks_menu_tentangapp">Tentang Aplikasi</string>
+    <string name="ic_teks_menu_sso_login">SSO Login</string>
 
 
     <!-- TOAST -->
@@ -77,6 +79,7 @@
     <string name="login_login">Masuk Pantau Harga</string>
     <string name="teks_daftar">DAFTAR</string>
     <string name="teks_masuk">MASUK</string>
+    <string name="teks_simpan">SIMPAN</string>
 
     <!-- GAGAL TOAST REGISTER LOGIN-->
     <string name="oklogin_masuk">Anda berhasil masuk ke akun Pantau Harga anda. Anda bisa lanjut memantau harga serta memperbaharui harga terbaru dari komoditas tersedia.</string>
@@ -86,7 +89,7 @@
     <string name="gagalogin_buatakun">Gagal membuat akun Pantau Harga</string>
 
     <!-- PERINGATAN LOGIN -->
-    <string name="toast_loginmasukdulu">Silahkan masuk ke akun Pantau Harga terlebih dahulu sebelum lanjut mengirim harga komoditas terbaru</string>
+    <string name="toast_loginmasukdulu">Silahkan masuk ke akun Pantau Harga dan pastikan telah mengisi data diri terlebih dahulu sebelum lanjut mengirim harga komoditas terbaru</string>
     <string name="toast_loginkeluarok">Anda telah keluar dari akun Pantau Harga</string>
 
 
@@ -104,6 +107,14 @@
     <string name="datapengguna_alamat">Alamat Lengkap</string>
     <string name="datapengguna_kodepos">Kode Pos</string>
     <string name="datapengguna_tombol_keluar">KELUAR AKUN</string>
+
+    <string name="err_username">Isi nama panggilan (username) dengan benar</string>
+    <string name="err_nama">Isi nama lengkap anda dengan benar</string>
+    <string name="err_email">Isi alamat email dengan benar</string>
+    <string name="err_nomor_hp">Isi nomor handphone dengan benar</string>
+    <string name="err_nomor_ktp">Isi nomor KTP dengan benar</string>
+    <string name="err_kode_pos">Isi nomor Kode Pos dengan benar</string>
+    <string name="err_alamat">Isi alamat lengkap dengan benar</string>
 
 
     <!-- KIRIM LAPORAN HARGA BARANG -->
@@ -158,6 +169,10 @@
     <string name="riwayat_ingathapussatu">Hapus data laporan ini ?</string>
     <string name="riwayat_hapusdataselesai">Data telah dihapus</string>
 
+    <!-- NOTIFIKASI -->
+    <string name="notification_title">Notification</string>
+    <string name="notification_empty">Data notifikasi tidak tersedia</string>
+
 
     <!-- TENTANG APLIKASI -->
     <string name="tentangapl_judul">Tentang Aplikasi</string>
@@ -175,6 +190,61 @@
     <string name="scan">Scan</string>
     <string name="btn_scan_now">Scan Now</string>
     <string name="txt_scan_qr_code">Scan QR</string>
+    <string name="teks_login1">Login Google</string>
+    <string name="lapor_gagalkirimdata3">Silahkan Login terlebih dahulu sebelum mengirim rate ke user</string>
+    <string name="lapor_okkirimdatarating">Terimakasih sudah mengirimkan rate</string>
+    <string name="lapor_rating">RATING KOMODITAS</string>
 
 
+    <!-- GOOGLE SSO -->
+    <string name="sso_login_title">Login Google SSO</string>
+    <string name="title_text">Google SSO Pangestu</string>
+    <string name="signed_in_fmt">Signed in as: %s</string>
+    <string name="signed_in">Signed in</string>
+    <string name="signing_in">Signing in…</string>
+    <string name="signed_out">Signed out</string>
+    <string name="signed_in_err">"Error: please check logs."</string>
+    <string name="error_null_person">
+        Error: Plus.PeopleApi.getCurrentPerson returned null. Ensure that the Google+ API is
+        enabled for your project, you have a properly configured google-services.json file
+        and that your device has an internet connection.
+    </string>
+    <string name="loading">Loading…</string>
+    <string name="auth_code_fmt">Auth Code: %s</string>
+    <string name="id_token_fmt">ID Token: %s</string>
+
+    <!-- Google Play Services error for Toast -->
+    <string name="play_services_error_fmt">Google Play Services Error: %i</string>
+
+    <!-- Button labels -->
+    <string name="save_profile">Save Profile</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="disconnect">Disconnect</string>
+
+    <!-- Content Description for images -->
+    <string name="desc_google_icon">Google Logo</string>
+
+    <!-- Rationale for asking for Contacts -->
+    <string name="contacts_permission_rationale">Contacts access is needed in order to retrieve your email address.</string>
+
+    <!-- Activity Names and Descriptions -->
+    <string name="name_sign_in_activity">SignInActivity</string>
+    <string name="desc_sign_in_activity">Signing in, signing out, and revoking access.</string>
+    <string name="desc_sign_in_activity_scopes">Signing in, signing out, and revoking access with Google Drive permissions.</string>
+    <string name="name_id_token_activity">IdTokenActivity</string>
+    <string name="desc_id_token_activity">Retrieving an ID Token for the user.</string>
+    <string name="desc_auth_code_activity">Demonstrate retrieving an auth code for authorizing your server.</string>
+    <string name="name_auth_code_activity">ServerAuthCodeActivity</string>
+
+    <!--<string name="server_client_id">187999236302-5v8213o22g0jr80obt968r5qguquv7ae.apps.googleusercontent.com</string>-->
+    <string name="server_client_id">670667690336-thnk804150erhpjd8df5ue1jvdp2aiqe.apps.googleusercontent.com</string>
+
+    <string name="logo_description">Logo Pantau Harga</string>
+    <string name="image_profile">Image Profile</string>
+    <string name="nama_lengkap">Nama Panggilan</string>
+    <string name="login_success">Anda berhasil masuk ke akun Pantau Harga anda. Anda bisa lanjut memantau harga serta memperbaharui harga terbaru dari komoditas tersedia.</string>
+    <string name="save_success">Berhasil menyimpan data!</string>
+    <string name="save_failed">Gagal menyimpan data!</string>
+    <string name="splash_description">Splash Image</string>
+    <string name="sub_title">Komoditas Pangan</string>
 </resources>

@@ -9,15 +9,14 @@ import android.support.v7.app.AlertDialog;
 import android.view.WindowManager;
 
 import id.pantauharga.android.R;
-import id.pantauharga.android.aktivitas.LoginRegistersPengguna;
+import id.pantauharga.android.aktivitas.Rating;
 
 /**
  * Created by Gulajava Ministudio on 11/9/15.
  */
-public class DialogOkLogOut extends DialogFragment {
+public class DialogOkKirimRating extends DialogFragment {
 
-
-    private LoginRegistersPengguna mLoginRegistersPengguna;
+    private Rating mLaporHargaAkt;
 
 
     @NonNull
@@ -25,11 +24,12 @@ public class DialogOkLogOut extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
-        mLoginRegistersPengguna = (LoginRegistersPengguna) DialogOkLogOut.this.getActivity();
+        mLaporHargaAkt = (Rating) DialogOkKirimRating.this.getActivity();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(DialogOkLogOut.this.getActivity());
-        builder.setMessage(R.string.toast_loginkeluarok);
-        builder.setPositiveButton(R.string.teks_ok, listenerok);
+        AlertDialog.Builder builder = new AlertDialog.Builder(DialogOkKirimRating.this.getActivity());
+        builder.setMessage(R.string.lapor_okkirimdatarating);
+        builder.setPositiveButton(R.string.teks_dialog_selesai, listenerok);
+//        builder.setNegativeButton(R.string.teks_dialog_kirim, listenerkirimlain);
 
         Dialog dialog = builder.create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -42,10 +42,17 @@ public class DialogOkLogOut extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
 
-            mLoginRegistersPengguna.setOkLogOut();
-            DialogOkLogOut.this.dismiss();
+            mLaporHargaAkt.setOkTerkirim();
+            DialogOkKirimRating.this.dismiss();
         }
     };
 
+    DialogInterface.OnClickListener listenerkirimlain = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+
+            DialogOkKirimRating.this.dismiss();
+        }
+    };
 
 }

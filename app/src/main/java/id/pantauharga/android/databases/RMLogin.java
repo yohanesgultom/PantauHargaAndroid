@@ -7,6 +7,7 @@ import io.realm.RealmObject;
  */
 public class RMLogin extends RealmObject {
 
+    private String id;
     private String username;
     private String nama;
     private String email;
@@ -14,6 +15,8 @@ public class RMLogin extends RealmObject {
     private String nohp;
     private String alamat;
     private String kodepos;
+    private String photoUrl;
+    private String token;
 
     public RMLogin() {
     }
@@ -72,5 +75,29 @@ public class RMLogin extends RealmObject {
 
     public void setKodepos(String kodepos) {
         this.kodepos = kodepos;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public String getPhotoUrl() {
+        return this.photoUrl;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return this.token;
     }
 }

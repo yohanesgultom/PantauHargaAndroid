@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:keepScreenOn="true"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    android:orientation="vertical">
 
 
-    <include layout="@layout/toolbars"/>
+    <include layout="@layout/toolbars" />
 
 
     <ScrollView
@@ -18,54 +18,56 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@color/colorPrimary"
+            android:orientation="vertical"
+            android:weightSum="1">
 
+
+            <ImageView
+                android:id="@+id/gambarlogo"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/logo_description"
+                android:scaleType="fitCenter" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="4dp"
+                android:text="@string/app_name"
+                android:textColor="@color/putih"
+                android:textSize="@dimen/ukuran20sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/tentangapl_judulversi"
+                android:textColor="@color/putih"
+                android:textSize="@dimen/ukuran16sp" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:text="@string/tentangapl_pembuat"
+                android:textColor="@color/putih"
+                android:textSize="@dimen/ukuran16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_vertical_margin"
                 android:orientation="vertical">
-
-
-                <ImageView
-                    android:id="@+id/gambarlogo"
-                    android:layout_width="104dp"
-                    android:layout_height="104dp"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"/>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="4dp"
-                    android:text="@string/app_name"
-                    android:textColor="@color/abu_teks_tebal500"
-                    android:textSize="@dimen/ukuran20sp"
-                    android:textStyle="bold"/>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/tentangapl_judulversi"
-                    android:textColor="@color/abu_teks_tebal200"
-                    android:textSize="@dimen/ukuran16sp"/>
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="6dp"
-                    android:text="@string/tentangapl_pembuat"
-                    android:textColor="@color/abu_teks_tebal500"
-                    android:textSize="@dimen/ukuran16sp"/>
 
 
                 <LinearLayout
@@ -88,8 +90,7 @@
                             android:layout_height="32dp"
                             android:adjustViewBounds="true"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/ic_action_personpembuat"
-                            />
+                            android:src="@drawable/ic_action_personpembuat" />
 
                     </LinearLayout>
 
@@ -104,9 +105,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/tentangapl_facebook"
-                            android:textColor="@color/abu_teks_tebal500"
+                            android:textColor="@color/putih"
                             android:textSize="@dimen/ukuran16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <TextView
@@ -114,8 +115,8 @@
                             android:layout_height="wrap_content"
                             android:autoLink="all"
                             android:text="@string/tentangapl_facebooklink"
-                            android:textColor="@color/abu_teks_tebal200"
-                            android:textSize="@dimen/ukuran16sp"/>
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/ukuran16sp" />
 
 
                     </LinearLayout>
@@ -144,8 +145,7 @@
                             android:layout_height="32dp"
                             android:adjustViewBounds="true"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/ic_action_personpembuat"
-                            />
+                            android:src="@drawable/ic_action_personpembuat" />
 
                     </LinearLayout>
 
@@ -161,9 +161,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Pembuat 1"
-                            android:textColor="@color/abu_teks_tebal500"
+                            android:textColor="@color/putih"
                             android:textSize="@dimen/ukuran16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <TextView
@@ -171,8 +171,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/tentangapl_judulversi"
-                            android:textColor="@color/abu_teks_tebal200"
-                            android:textSize="@dimen/ukuran16sp"/>
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/ukuran16sp" />
 
 
                     </LinearLayout>
@@ -200,8 +200,7 @@
                             android:layout_height="32dp"
                             android:adjustViewBounds="true"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/ic_action_personpembuat"
-                            />
+                            android:src="@drawable/ic_action_personpembuat" />
 
                     </LinearLayout>
 
@@ -217,9 +216,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Pembuat 2"
-                            android:textColor="@color/abu_teks_tebal500"
+                            android:textColor="@color/putih"
                             android:textSize="@dimen/ukuran16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <TextView
@@ -227,8 +226,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/tentangapl_judulversi"
-                            android:textColor="@color/abu_teks_tebal200"
-                            android:textSize="@dimen/ukuran16sp"/>
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/ukuran16sp" />
 
 
                     </LinearLayout>
@@ -256,8 +255,7 @@
                             android:layout_height="32dp"
                             android:adjustViewBounds="true"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/ic_action_personpembuat"
-                            />
+                            android:src="@drawable/ic_action_personpembuat" />
 
                     </LinearLayout>
 
@@ -273,9 +271,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Pembuat 3"
-                            android:textColor="@color/abu_teks_tebal500"
+                            android:textColor="@color/putih"
                             android:textSize="@dimen/ukuran16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <TextView
@@ -283,8 +281,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/tentangapl_judulversi"
-                            android:textColor="@color/abu_teks_tebal200"
-                            android:textSize="@dimen/ukuran16sp"/>
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/ukuran16sp" />
 
 
                     </LinearLayout>
@@ -312,8 +310,7 @@
                             android:layout_height="32dp"
                             android:adjustViewBounds="true"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/ic_action_personpembuat"
-                            />
+                            android:src="@drawable/ic_action_personpembuat" />
 
                     </LinearLayout>
 
@@ -328,9 +325,9 @@
                             android:id="@+id/pembuat4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/abu_teks_tebal500"
+                            android:textColor="@color/putih"
                             android:textSize="@dimen/ukuran16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <TextView
@@ -338,8 +335,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/tentangapl_judulversi"
-                            android:textColor="@color/abu_teks_tebal200"
-                            android:textSize="@dimen/ukuran16sp"/>
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/ukuran16sp" />
 
 
                     </LinearLayout>
@@ -351,7 +348,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="@color/abubayangan"/>
+                    android:background="@color/abubayangan" />
 
 
                 <LinearLayout
@@ -367,8 +364,7 @@
                         android:layout_height="48dp"
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/gulajavas"
-                        />
+                        android:src="@drawable/gulajavas" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -381,9 +377,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Pembuat Redesain"
-                            android:textColor="@color/abu_teks_tebal500"
+                            android:textColor="@color/putih"
                             android:textSize="@dimen/ukuran16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
 
                         <TextView
@@ -391,8 +387,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Gulajava"
-                            android:textColor="@color/abu_teks_tebal500"
-                            android:textSize="@dimen/ukuran16sp"/>
+                            android:textColor="@color/putih"
+                            android:textSize="@dimen/ukuran16sp" />
 
 
                         <TextView
@@ -400,8 +396,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Email"
-                            android:textColor="@color/abu_teks_tebal200"
-                            android:textSize="@dimen/ukuran16sp"/>
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/ukuran16sp" />
 
 
                     </LinearLayout>
@@ -413,7 +409,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginTop="16dp"
-                    android:background="@color/transparan"/>
+                    android:background="@color/transparan" />
 
 
             </LinearLayout>

@@ -10,7 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.WindowManager;
 
 import id.pantauharga.android.R;
-import id.pantauharga.android.aktivitas.LoginRegistersPengguna;
+import id.pantauharga.android.aktivitas.SSOLogin;
 
 /**
  * Created by Gulajava Ministudio on 11/9/15.
@@ -40,7 +40,7 @@ public class DialogPeringatanLoginDulu extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
 
-            Intent intentadminpengguna = new Intent(DialogPeringatanLoginDulu.this.getActivity(), LoginRegistersPengguna.class);
+            Intent intentadminpengguna = new Intent(DialogPeringatanLoginDulu.this.getActivity(), SSOLogin.class);
             DialogPeringatanLoginDulu.this.startActivity(intentadminpengguna);
             DialogPeringatanLoginDulu.this.dismiss();
         }

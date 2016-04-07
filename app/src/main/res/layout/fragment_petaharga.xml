@@ -107,7 +107,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:text="Keterangan : "
+                            android:text="Keterangan :"
+                            android:textColor="@color/warnatekssubjudul"
+                            android:textSize="@dimen/ukuran14sp" />
+                        <TextView
+                            android:id="@+id/teks_rate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="Rating User : "
                             android:textColor="@color/warnatekssubjudul"
                             android:textSize="@dimen/ukuran14sp" />
 
@@ -154,7 +162,15 @@
                             app:fabSize="mini"
                             android:layout_weight="0.31" />
 
-
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/tombol_rating"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ikon_float_navigasi"
+                            app:backgroundTint="@color/colorAccent"
+                            app:elevation="0dp"
+                            app:fabSize="mini"
+                            android:layout_weight="0.23" />
                     </LinearLayout>
                 </LinearLayout>
 

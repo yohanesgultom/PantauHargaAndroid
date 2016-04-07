@@ -20,18 +20,19 @@ import bolts.Continuation;
 import bolts.Task;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import id.pantauharga.android.service.NotificationService;
+import id.pantauharga.android.databases.RMJsonData;
+import id.pantauharga.android.databases.RMLogin;
+import id.pantauharga.android.internets.Apis;
+import id.pantauharga.android.internets.StrRekuestGet;
+import id.pantauharga.android.parsers.CekGPSNet;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import id.pantauharga.android.Konstan;
 import id.pantauharga.android.R;
-import id.pantauharga.android.databases.RMJsonData;
-import id.pantauharga.android.databases.RMLogin;
-import id.pantauharga.android.internets.Apis;
-import id.pantauharga.android.internets.StrRekuestGet;
 import id.pantauharga.android.internets.Volleys;
-import id.pantauharga.android.parsers.CekGPSNet;
 import id.pantauharga.android.parsers.Parseran;
 
 /**
@@ -50,7 +51,7 @@ public class Loading extends AppCompatActivity {
     Runnable splash = new Runnable() {
         @Override
         public void run() {
-
+            startService(new Intent(Loading.this, NotificationService.class));
             Intent intentloading = new Intent(Loading.this, MenuUtama.class);
             Loading.this.startActivity(intentloading);
             Loading.this.finish();
@@ -85,7 +86,7 @@ public class Loading extends AppCompatActivity {
         setContentView(R.layout.loadings);
         ButterKnife.bind(Loading.this);
 
-        Glide.with(Loading.this).load(R.drawable.banana).into(gambarbesar);
+        Glide.with(Loading.this).load(R.drawable.logo).into(gambarbesar);
 
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(Loading.this).build();
 
@@ -266,7 +267,7 @@ public class Loading extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.w("SUKSES", "SUKSES");
+                        Log.w("SUKSES", "SUKSES " + response);
 
                         if (isAktivitasJalan) {
                             cekSimpanData(response);

@@ -45,13 +45,13 @@ import bolts.Task;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import id.pantauharga.android.databases.RMJsonData;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import id.pantauharga.android.Konstan;
 import id.pantauharga.android.R;
 import id.pantauharga.android.databases.RMDataRiwayat;
-import id.pantauharga.android.databases.RMJsonData;
 import id.pantauharga.android.databases.RMLogin;
 import id.pantauharga.android.dialogs.DialogOkKirim;
 import id.pantauharga.android.internets.Apis;
@@ -98,7 +98,6 @@ public class LaporHarga extends BaseActivityLocation {
     LinearLayout layout_jumlahkomoditas;
 
 
-
     private String idkomoditas = "";
     private String namakomoditas = "";
     private String hargakomoditas = "";
@@ -106,7 +105,7 @@ public class LaporHarga extends BaseActivityLocation {
     private String namalokasi = "";
     private String latitude = "";
     private String longitude = "";
-    private String keterangan ="";
+    private String keterangan = "";
 
 
     //database
@@ -180,7 +179,7 @@ public class LaporHarga extends BaseActivityLocation {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_laporharga);
         ButterKnife.bind(LaporHarga.this);
-        munculMenuAction(LaporHarga.this) ;
+        munculMenuAction(LaporHarga.this);
 
         Bundle bundle = LaporHarga.this.getIntent().getExtras();
         kode_kirimKomoditas = bundle.getInt(Konstan.TAG_INTENT_STATKIRIMHARGA);
@@ -521,7 +520,7 @@ public class LaporHarga extends BaseActivityLocation {
         if (kode_kirimKomoditas == Konstan.KODE_KIRIMHARGAJUALKOMO_AKT) {
             jumlahkomoditas = edit_jumlahkomoditas.getText().toString();
             keterangan = edit_keterangan.getText().toString();
-            if(keterangan.equals("")){
+            if (keterangan.equals("")) {
                 keterangan = "0";
             }
         } else {
@@ -575,7 +574,7 @@ public class LaporHarga extends BaseActivityLocation {
         longitude = "" + longitudepengguna;
 
         simpanDatabase(true, false, idkomoditas, namakomoditas, latitude, longitude,
-                namalokasi, datakirim_nohp, hargakomoditas, jumlahkomoditas,keterangan);
+                namalokasi, datakirim_nohp, hargakomoditas, jumlahkomoditas, keterangan);
     }
 
 
@@ -629,6 +628,7 @@ public class LaporHarga extends BaseActivityLocation {
 
                         String hasiljsons = task.getResult();
                         Log.w("HASIL PARSE CEK", "HASIL PARSE JSON CEK " + hasiljsons);
+                       // Toast.makeText(LaporHarga.this, task.getResult(), Toast.LENGTH_SHORT).show();
 
                         //kirim ke server
                         kirimDataServer(hasiljsons);

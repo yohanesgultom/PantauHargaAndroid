@@ -10,16 +10,15 @@ import java.util.Map;
 import id.pantauharga.android.Konstan;
 import id.pantauharga.android.modelgson.HargaKomoditasItem;
 import id.pantauharga.android.modelgson.HargaKomoditasLapor;
-import id.pantauharga.android.modelgson.Logins;
-import id.pantauharga.android.modelgson.Registrasis;
+import id.pantauharga.android.modelgson.User;
 
 /**
  * Created by Gulajava Ministudio on 11/6/15.
  */
 public class Apis {
 
-    public static int JUMLAH_TIMEOUT = 2500;
-    public static int JUMLAH_COBA = 2;
+    public static int JUMLAH_TIMEOUT = 60000;
+    public static int JUMLAH_COBA = 1;
     public static float PENGALI_TIMEOUT = 1;
 
     public Apis() {
@@ -34,34 +33,38 @@ public class Apis {
     ///Api/hargaall.json
     public static String getLinkHargaKomoditas() {
         return Konstan.ALAMATSERVER + "/Api/hargaall.json";
-    }
+    }//rating
 
+    public static String getLinkRating() {
+        return Konstan.ALAMATSERVER + "/Api/rating.json";
+    }
 
     //LAPORKAN HARGA KOMODITAS
     ///Api/input.json
     public static String getLinkLaporHargaKomoditas() {
-        return Konstan.ALAMATSERVER +"/Api/input.json";
+        return Konstan.ALAMATSERVER + "/Api/input.json";
+    }
 
-    }
     public static String getLinkPesanKomoditas() {
-       return Konstan.ALAMATSERVER + "/Api/inputRequest.json";
+        return Konstan.ALAMATSERVER + "/Api/inputRequest.json";
     }
+
+    public static String getLinkDeleteRiwayat() {
+        return Konstan.ALAMATSERVER + "/Api/deleteInput.json";
+    }
+
     //AMBIL DAFTAR KOMODITAS
     ///Api/comodityall.json
     public static String getLinkDaftarKomoditas() {
         return Konstan.ALAMATSERVER + "/Api/comodityall.json";
     }
 
-    //REGISTER PENGGUNA
-    ///Api/register.json
-    public static String getLinkRegisterPengguna() {
-        return Konstan.ALAMATSERVER + "/Api/register.json";
+    public static String getLinkUpdateUser() {
+        return Konstan.ALAMATSERVER + "/Api/updateUser.json";
     }
 
-    //LOGIN PENGGUNA
-    ///Api/login.json
-    public static String getLinkLoginPengguna() {
-        return Konstan.ALAMATSERVER + "/Api/login.json";
+    public static String getLinkVerifyUser() {
+        return Konstan.ALAMATSERVER + "/Api/google.json";
     }
 
 
@@ -69,7 +72,6 @@ public class Apis {
 
         return new DefaultRetryPolicy(JUMLAH_TIMEOUT, JUMLAH_COBA, PENGALI_TIMEOUT);
     }
-
 
     /**
      * AMBIL REQUEST VOLLEY UNTUK KIRIM KE SERVERS
@@ -150,23 +152,22 @@ public class Apis {
         return strRekuestGet;
     }
 
-
-    //REGISTER PENGGUNA
-    public static JacksonRequest<Registrasis> postRequestRegistrasi(
+    //UPDATE USER
+    public static JacksonRequest<User> postRequestUpdateUser(
             String urls,
             Map<String, String> headers,
             Map<String, String> params,
             String jsonbodystr,
-            Response.Listener<Registrasis> listenerok,
+            Response.Listener<User> listenerok,
             Response.ErrorListener listenergagal
     ) {
 
         headers.put(Konstan.TAG_HEADERCONTENTIPE, Konstan.HEADER_JSONTYPE);
 
-        JacksonRequest<Registrasis> jacksonRequest = new JacksonRequest<>(
+        JacksonRequest<User> jacksonRequest = new JacksonRequest<>(
                 Request.Method.POST,
                 urls,
-                Registrasis.class,
+                User.class,
                 headers,
                 params,
                 jsonbodystr,
@@ -179,34 +180,20 @@ public class Apis {
         return jacksonRequest;
     }
 
+    //AMBIL DAFTAR KOMODITAS
+    public static StrRekuestGet getRequestGoogle(String urls, Response.Listener<String> listenerok,
+                                                          Response.ErrorListener listenergagal) {
 
-    //LOGIN PENGGUNA
-    public static JacksonRequest<Logins> postRequestLogin(
-            String urls,
-            Map<String, String> headers,
-            Map<String, String> params,
-            String jsonbodystr,
-            Response.Listener<Logins> listenerok,
-            Response.ErrorListener listenergagal
-    ) {
-
-        headers.put(Konstan.TAG_HEADERCONTENTIPE, Konstan.HEADER_JSONTYPE);
-
-        JacksonRequest<Logins> jacksonRequest = new JacksonRequest<>(
-                Request.Method.POST,
+        StrRekuestGet strRekuestGet = new StrRekuestGet(
+                Request.Method.GET,
                 urls,
-                Logins.class,
-                headers,
-                params,
-                jsonbodystr,
+                null,
                 listenerok,
                 listenergagal
         );
 
-        jacksonRequest.setRetryPolicy(getRetryPolicy());
+        strRekuestGet.setRetryPolicy(getRetryPolicy());
 
-        return jacksonRequest;
+        return strRekuestGet;
     }
-
-
 }
