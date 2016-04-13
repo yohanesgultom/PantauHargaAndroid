@@ -238,6 +238,7 @@
 
     <!--<string name="server_client_id">187999236302-5v8213o22g0jr80obt968r5qguquv7ae.apps.googleusercontent.com</string>-->
     <string name="server_client_id">670667690336-thnk804150erhpjd8df5ue1jvdp2aiqe.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">506938199514401</string>
 
     <string name="logo_description">Logo Pantau Harga</string>
     <string name="image_profile">Image Profile</string>
@@ -247,4 +248,12 @@
     <string name="save_failed">Gagal menyimpan data!</string>
     <string name="splash_description">Splash Image</string>
     <string name="sub_title">Komoditas Pangan</string>
+
+    <string name="nama_komoditas">Nama Komoditas</string>
+    <string name="harga_komoditas">Rp 0,-</string>
+    <string name="alamat_komoditas">Alamat :</string>
+    <string name="telepon_komoditas">Nomor Telepon :</string>
+    <string name="last_update_komoditas">Lastupdate :</string>
+    <string name="keterangan_komoditas">Keterangan :</string>
+    <string name="rate_komoditas">Rating User :</string>
 </resources>

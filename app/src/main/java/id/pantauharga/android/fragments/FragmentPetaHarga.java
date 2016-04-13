@@ -1,11 +1,17 @@
 package id.pantauharga.android.fragments;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,6 +33,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,7 +52,6 @@ import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import id.pantauharga.android.Konstan;
 import id.pantauharga.android.R;
-import id.pantauharga.android.aktivitas.MenuUtama;
 import id.pantauharga.android.aktivitas.Rating;
 import id.pantauharga.android.messagebus.MessageAktFrag;
 import id.pantauharga.android.modelgson.HargaKomoditasItem;
@@ -52,17 +61,17 @@ import id.pantauharga.android.parsers.Parseran;
 /**
  * Created by Gulajava Ministudio on 11/5/15.
  */
-public class FragmentPetaHarga extends Fragment  {
+public class FragmentPetaHarga extends Fragment {
 
 
     //GOOGLE MAPS
     private SupportMapFragment mapfragment;
     private GoogleMap map;
     private static final int paddingTop_dp = 0;
-    private static final int paddingBottom_dp = 140;
+    private static final int paddingBottom_dp = 250;
     private static int paddingTop_px = 0;
     private static int paddingBottom_px = 0;
-    private MenuUtama menuu;
+
     @Bind(R.id.teks_namakomoditas)
     TextView teks_namakomoditas;
     @Bind(R.id.teks_keterangan)
@@ -85,16 +94,18 @@ public class FragmentPetaHarga extends Fragment  {
     FloatingActionButton btnSms;
     @Bind(R.id.tombol_rating)
     FloatingActionButton btnRating;
+    @Bind(R.id.btn_share)
+    FloatingActionButton btnShare;
+
 
     //untuk menampilkan marker posisi pengguna
-    private LatLng kordinatsaya = null;
-    private CameraPosition posisikamerasaya = null;
-    private Marker markersaya = null;
-    private double latitudesaya = 0;
-    private double longitudesaya = 0;
-    private Location lokasisaya = null;
+    private LatLng myCoordinate = null;
+    private CameraPosition myCameraPosition = null;
+    private Location myLocation = null;
+    private Marker myMarker = null;
+    private double myLatitude = 0;
+    private double myLongitude = 0;
     private boolean isMapSiap = false;
-    private Date init_last_updated = new Date();
     private SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyy HH:mm");
     //DAFTAR HARGA KOMODITAS
 
@@ -104,7 +115,6 @@ public class FragmentPetaHarga extends Fragment  {
     private Map<Marker, HargaKomoditasItemKomparator> hashmapListHarga;
 
     //JIKA PETA DIPILIH DARI HALAMAN SEBELAH
-    private LatLng kordinatklik = null;
     private CameraPosition posisikameraklik = null;
     private Marker markerklik = null;
 
@@ -122,18 +132,18 @@ public class FragmentPetaHarga extends Fragment  {
     private List<Address> addressListPengguna = null;
     private String gecoder_alamat = "";
     private String gecoder_namakota = "";
-    private String alamatgabungan = "";
 
-    private String init_namakomoditas = "";
-    private int init_hargakomoditas = 0;
-    private int init_type = 0;
-    private String init_keterangan = "";
-    private String str_formathargakomoditas = "0";
-    private String init_alamatkomoditas = "";
-    private String init_telponkomoditas = "";
-    private String init_latitudekomoditas = "0";
-    private String init_longitudekomoditas = "0";
-    private String init_rate = "0";
+    private String namaKomoditas = "";
+    private String keteranganKomoditas = "";
+    private String formatHargaKomoditas = "0";
+    private String alamatKomoditas = "";
+    private String teleponKomoditas = "";
+    private String latitudeKomoditas = "0";
+    private String longitudeKomoditas = "0";
+    private String rateKomoditas = "0";
+    private Date lastUpdatedKomoditas = new Date();
+    private int hargaKomoditas = 0;
+    private int typeKomoditas = 0;
 
 
     @Nullable
@@ -152,6 +162,8 @@ public class FragmentPetaHarga extends Fragment  {
         btnTelepon.setOnClickListener(listenerTelepon);
         btnRating.setOnClickListener(listenerRating);
         btnSms.setOnClickListener(listenerSms);
+        btnShare.setOnClickListener(listenerShare);
+
         teks_alamatkomoditas.setVisibility(View.GONE);
         teks_telponkomoditas.setVisibility(View.GONE);
         teks_keterangan.setVisibility(View.GONE);
@@ -183,31 +195,36 @@ public class FragmentPetaHarga extends Fragment  {
         }
     }
 
-    public void displayInfo(HargaKomoditasItemKomparator itemloks) {
-        init_namakomoditas = itemloks.getBarang();
-        init_hargakomoditas = itemloks.getPrice();
-        init_telponkomoditas = itemloks.getNohp();
-        init_latitudekomoditas = itemloks.getLatitude();
-        init_longitudekomoditas = itemloks.getLongitude();
-        init_keterangan = itemloks.getKeterangan();
-        init_rate = itemloks.getTotalrating();
-        init_last_updated = itemloks.getLastUpdated();
-        init_type = itemloks.getType();
-        String namakomoditastype = "";
-        if (init_type == 2) {
-            namakomoditastype = init_namakomoditas + "(Beli)";
-        } else if (init_type == 1) {
-            namakomoditastype = init_namakomoditas + "(Jual)";
-        } else {
-            namakomoditastype = init_namakomoditas + "(Pantau)";
+    public void displayInfo(HargaKomoditasItemKomparator itemKomoditas) {
+        namaKomoditas = itemKomoditas.getBarang();
+        hargaKomoditas = itemKomoditas.getPrice();
+        teleponKomoditas = itemKomoditas.getNohp();
+        latitudeKomoditas = itemKomoditas.getLatitude();
+        longitudeKomoditas = itemKomoditas.getLongitude();
+        keteranganKomoditas = itemKomoditas.getKeterangan();
+        rateKomoditas = itemKomoditas.getTotalrating();
+        lastUpdatedKomoditas = itemKomoditas.getLastUpdated();
+        typeKomoditas = itemKomoditas.getType();
+        String type;
+        switch (typeKomoditas) {
+            case 1:
+                type = "(Jual) ";
+                break;
+            case 2:
+                type = "(Beli) ";
+                break;
+            default:
+                type = "(Pantau) ";
+                break;
+
         }
 
-        teks_namakomoditas.setText(namakomoditastype);
+        teks_namakomoditas.setText(type + namaKomoditas);
 
-        str_formathargakomoditas = "Rp " + mParseran.formatAngkaPisah(init_hargakomoditas) + ",-";
-        teks_hargakomoditas.setText(str_formathargakomoditas);
-        if (init_telponkomoditas.length() > 4) {
-            String teksets = "Telp : " + init_telponkomoditas;
+        formatHargaKomoditas = "Rp " + mParseran.formatAngkaPisah(hargaKomoditas) + ",-";
+        teks_hargakomoditas.setText(formatHargaKomoditas);
+        if (teleponKomoditas.length() > 4) {
+            String teksets = "Telp : " + teleponKomoditas;
             teks_telponkomoditas.setText(teksets);
             teks_telponkomoditas.setVisibility(View.VISIBLE);
             btnTelepon.setVisibility(View.VISIBLE);
@@ -219,22 +236,22 @@ public class FragmentPetaHarga extends Fragment  {
             btnTelepon.setVisibility(View.GONE);
             btnSms.setVisibility(View.GONE);
         }
-        //Toast.makeText(FragmentPetaHarga.this.getActivity()String.valueOf(itemloks.getKeterangan()),Toast.LENGTH_SHORT).show();
-        if (init_keterangan != null && !init_keterangan.isEmpty()) {
-            teks_keterangan.setText("Keterangan : " + init_keterangan);
+
+        if (keteranganKomoditas != null && !keteranganKomoditas.isEmpty()) {
+            teks_keterangan.setText("Keterangan : " + keteranganKomoditas);
             teks_keterangan.setVisibility(View.VISIBLE);
         } else {
             teks_keterangan.setText("Keterangan : -");
             teks_keterangan.setVisibility(View.GONE);
         }
-        if (init_rate != null && !init_rate.isEmpty()) {
-            teks_rate.setText("Rating User : " + init_rate);
+        if (rateKomoditas != null && !rateKomoditas.isEmpty()) {
+            teks_rate.setText("Rating User : " + rateKomoditas);
             teks_rate.setVisibility(View.VISIBLE);
         } else {
             teks_rate.setText("Rating User : -");
             teks_rate.setVisibility(View.GONE);
         }
-        teks_lastupdate.setText("Last Updated : " + formatDate.format(init_last_updated));
+        teks_lastupdate.setText("Last Updated : " + formatDate.format(lastUpdatedKomoditas));
     }
 
 
@@ -246,11 +263,9 @@ public class FragmentPetaHarga extends Fragment  {
         int kodepesan = messageAktFrag.getKode();
 
         switch (kodepesan) {
-
             case Konstan.KODE_LISTBARU:
-
                 mListKomoditasHarga = messageAktFrag.getListHargaKomoditas();
-                lokasisaya = messageAktFrag.getLocation();
+                myLocation = messageAktFrag.getLocation();
                 modeUrutan = messageAktFrag.getModelist();
 
                 //segarkan daftars
@@ -265,7 +280,6 @@ public class FragmentPetaHarga extends Fragment  {
     private void cekDaftarHasil() {
 
         if (mListKomoditasHarga != null && mListKomoditasHarga.size() > 0) {
-
             //ambil list dan tampilkan ke peta
             parseKomparatorPeta();
         }
@@ -281,7 +295,7 @@ public class FragmentPetaHarga extends Fragment  {
             @Override
             public Object call() throws Exception {
 
-                mListKomoHargaKomparator = mParseran.parseListKomparator(mListKomoditasHarga, lokasisaya,
+                mListKomoHargaKomparator = mParseran.parseListKomparator(mListKomoditasHarga, myLocation,
                         modeUrutan);
 
                 return null;
@@ -296,10 +310,8 @@ public class FragmentPetaHarga extends Fragment  {
                     mapfragment.getMapAsync(mOnMapReadyCallback);
 
                 } else {
-
                     //peta gagal dimuat
                     munculSnackbar(R.string.toastgagalpeta);
-
                 }
 
                 return null;
@@ -320,8 +332,6 @@ public class FragmentPetaHarga extends Fragment  {
             map.getUiSettings().setCompassEnabled(true);
             map.getUiSettings().setZoomControlsEnabled(true);
 
-            //setel posisi saya awal
-            //setel peta marker
             setelPetaMarker();
 
             map.setOnMarkerClickListener(listenermarker);
@@ -330,24 +340,19 @@ public class FragmentPetaHarga extends Fragment  {
 
 
     private void hitungSkalaAtasBawah() {
-
         final float scale = getResources().getDisplayMetrics().density;
-
         //padding atas
         paddingTop_px = (int) (paddingTop_dp * scale + 0.5f);
         //padding bawah
         paddingBottom_px = (int) (paddingBottom_dp * scale + 0.5f);
-
     }
 
 
     //SETEL POSISI SAYA
     public void setelPosisiSayaAwal() {
-
         try {
-
-            if (markersaya != null) {
-                markersaya.remove();
+            if (myMarker != null) {
+                myMarker.remove();
             }
 
         } catch (Exception ex) {
@@ -355,20 +360,23 @@ public class FragmentPetaHarga extends Fragment  {
         }
 
 
-        Log.w("LOKASI", "lokasi saya peta " + latitudesaya + " , " + longitudesaya);
+        Log.w("LOKASI", "lokasi saya peta " + myLatitude + " , " + myLongitude);
 
-        kordinatsaya = new LatLng(latitudesaya, longitudesaya);
-        posisikamerasaya = new CameraPosition.Builder().target(kordinatsaya)
+        myCoordinate = new LatLng(myLatitude, myLongitude);
+        myCameraPosition = new CameraPosition.Builder()
+                .target(myCoordinate)
                 .zoom(16)
-                .bearing(0).tilt(0).build();
+                .bearing(0)
+                .tilt(0)
+                .build();
 
-        markersaya = map.addMarker(new MarkerOptions()
-                .position(kordinatsaya)
+        myMarker = map.addMarker(new MarkerOptions()
+                .position(myCoordinate)
                 .title("Posisi Saya")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_lokasi_saya)));
 
-        map.moveCamera(CameraUpdateFactory.newCameraPosition(posisikamerasaya));
-        markersaya.showInfoWindow();
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(myCameraPosition));
+        myMarker.showInfoWindow();
     }
 
 
@@ -376,12 +384,11 @@ public class FragmentPetaHarga extends Fragment  {
 
         Log.w("LOG PETA HARGA", "SETEL POSISI SAYA MARKER");
         if (location != null) {
+            myLocation = location;
+            myLatitude = myLocation.getLatitude();
+            myLongitude = myLocation.getLongitude();
 
-            lokasisaya = location;
-            latitudesaya = lokasisaya.getLatitude();
-            longitudesaya = lokasisaya.getLongitude();
-
-            Log.w("LOKASI", "lokasi saya peta " + latitudesaya + " , " + longitudesaya);
+            Log.w("LOKASI", "lokasi saya peta " + myLatitude + " , " + myLongitude);
             if (isMapSiap) {
                 try {
                     setelPosisiSayaAwal();
@@ -397,19 +404,17 @@ public class FragmentPetaHarga extends Fragment  {
     public void setelPetaMarker() {
 
         Log.w("LOG PETA HARGA", "SETEL PETA MARKER");
-        if (lokasisaya != null) {
+        if (myLocation != null) {
+            myLatitude = myLocation.getLatitude();
+            myLongitude = myLocation.getLongitude();
 
-            latitudesaya = lokasisaya.getLatitude();
-            longitudesaya = lokasisaya.getLongitude();
-
-            Log.w("LOKASI", "lokasi saya peta " + latitudesaya + " , " + longitudesaya);
+            Log.w("LOKASI", "lokasi saya peta " + myLatitude + " , " + myLongitude);
 
         }
 
         if (isMapSiap) {
 
             if (mListKomoHargaKomparator != null && mListKomoHargaKomparator.size() > 0) {
-
                 //setel ke marker
                 setelMarkerSemua();
 
@@ -419,7 +424,7 @@ public class FragmentPetaHarga extends Fragment  {
                 teks_hargakomoditas.setText("Harga tidak tersedia");
                 teks_alamatkomoditas.setText("Alamat tidak tersedia");
                 teks_telponkomoditas.setText("Telepon tidak tersedia");
-                teks_keterangan.setText("Tidah ada keterangan");
+                teks_keterangan.setText("Tidak ada keterangan");
             }
         }
 
@@ -434,62 +439,21 @@ public class FragmentPetaHarga extends Fragment  {
     private void setelMarkerSemua() {
 
         try {
-
-            int panjangarray = mListKomoHargaKomparator.size();
-            HargaKomoditasItemKomparator lokitem;
-            double dolatitude = 0;
-            double dolongitude = 0;
-            hashmapListHarga = new HashMap<>();
-
-            String loops_namakomoditas = "";
-            int loops_type = 0;
             map.clear();
             setelPosisiSayaAwal();
+            taskAmbilGeocoder(latitudeKomoditas, longitudeKomoditas);
+            int panjangarray = mListKomoHargaKomparator.size();
+            HargaKomoditasItemKomparator itemKomoditas;
+            hashmapListHarga = new HashMap<>();
 
-
-            //ambil data awal untuk inisialisasi keterangan
-            displayInfo(mListKomoHargaKomparator.get(0));
-
-            //task ambil geocoder
-            taskAmbilGeocoder(init_latitudekomoditas, init_longitudekomoditas);
-
-
-            //setel ke peta
             for (int i = 0; i < panjangarray; i++) {
-
-                lokitem = mListKomoHargaKomparator.get(i);
-                loops_namakomoditas = lokitem.getBarang();
-                loops_type = lokitem.getType();
-                String namakomo = "";
-                int icon = 0;
-                if (loops_type == 2) {
-                    namakomo = loops_namakomoditas + "(B)";
-                    icon = R.drawable.ic_buy;
-                } else if (loops_type == 1) {
-                    namakomo = loops_namakomoditas + "(J)";
-                    icon = R.drawable.ic_sell;
-                } else {
-                    namakomo = loops_namakomoditas + "(P)";
-                    icon = R.drawable.ic_pantau;
-                }
-
-                dolatitude = Double.valueOf(lokitem.getLatitude());
-                dolongitude = Double.valueOf(lokitem.getLongitude());
-
-                LatLng latlnglokasi = new LatLng(dolatitude, dolongitude);
-
-                MarkerOptions markeropsi = new MarkerOptions();
-                markeropsi.position(latlnglokasi);
-                markeropsi.title(namakomo);
-                markeropsi.icon(BitmapDescriptorFactory.fromResource(icon));
-
-                Marker markeradd = map.addMarker(markeropsi);
-
-                hashmapListHarga.put(markeradd, lokitem);
+                itemKomoditas = mListKomoHargaKomparator.get(i);
+                Marker markeradd = map.addMarker(setMarkerOptions(itemKomoditas));
+                hashmapListHarga.put(markeradd, itemKomoditas);
             }
 
             btnNavigasi.setVisibility(View.VISIBLE);
-
+            displayInfo(mListKomoHargaKomparator.get(0));
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -498,85 +462,62 @@ public class FragmentPetaHarga extends Fragment  {
     }
 
 
+    private MarkerOptions setMarkerOptions(HargaKomoditasItemKomparator itemKomoditas) {
+        int icon;
+        String type;
+        switch (itemKomoditas.getType()) {
+            case 1:
+                type = "(J) ";
+                icon = R.drawable.ic_sell;
+                break;
+            case 2:
+                type = "(B) ";
+                icon = R.drawable.ic_buy;
+                break;
+            default:
+                type = "(P) ";
+                icon = R.drawable.ic_pantau;
+                break;
+        }
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(new LatLng(Double.valueOf(itemKomoditas.getLatitude()), Double.valueOf(itemKomoditas.getLongitude())));
+        markerOptions.title(type + itemKomoditas.getBarang());
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(icon));
+        return markerOptions;
+    }
+
     //SETEL PILIHAN DARI FRAGMENT SEBELAH KE DALAM PETA
     public void setelMarkerSemuaPilihanKlik(int posisiklik) {
 
         try {
-
-            int panjangarray = mListKomoHargaKomparator.size();
-            HargaKomoditasItemKomparator lokitem;
-            double dolatitude = 0;
-            double dolongitude = 0;
-            hashmapListHarga = new HashMap<>();
-            Marker markeradd;
-
-            String loops_namakomoditas = "";
-            int loops_type = 0;
-
             map.clear();
             setelPosisiSayaAwal();
+            taskAmbilGeocoder(latitudeKomoditas, longitudeKomoditas);
+            HargaKomoditasItemKomparator itemKomoditas;
+            hashmapListHarga = new HashMap<>();
 
-
-            //ambil data awal untuk inisialisasi keterangan
-            displayInfo(mListKomoHargaKomparator.get(posisiklik));
-
-            //task ambil geocoder
-            taskAmbilGeocoder(init_latitudekomoditas, init_longitudekomoditas);
-
-            //setel ke peta
-            for (int i = 0; i < panjangarray; i++) {
-
-                lokitem = mListKomoHargaKomparator.get(i);
-
-                loops_namakomoditas = lokitem.getBarang();
-                loops_type = lokitem.getType();
-                String namakomo = "";
-                int icon2 = 0;
-                if (loops_type == 2) {
-                    namakomo = loops_namakomoditas + "(B)";
-                    icon2 = R.drawable.ic_buy;
-                } else if (loops_type == 1) {
-                    namakomo = loops_namakomoditas + "(J)";
-                    icon2 = R.drawable.ic_sell;
-                } else {
-                    namakomo = loops_namakomoditas + "(P)";
-                    icon2 = R.drawable.ic_pantau;
-                }
-                dolatitude = Double.valueOf(lokitem.getLatitude());
-                dolongitude = Double.valueOf(lokitem.getLongitude());
-
-                LatLng latlnglokasi = new LatLng(dolatitude, dolongitude);
-
-                MarkerOptions markeropsi = new MarkerOptions();
-                markeropsi.position(latlnglokasi);
-                markeropsi.title(namakomo);
-                markeropsi.icon(BitmapDescriptorFactory.fromResource(icon2));
-
-
+            for (int i = 0; i < mListKomoHargaKomparator.size(); i++) {
+                itemKomoditas = mListKomoHargaKomparator.get(i);
+                Marker markeradd = map.addMarker(setMarkerOptions(itemKomoditas));
                 if (posisiklik == i) {
-
-                    latpeta = dolatitude + "";
-                    longipeta = dolongitude + "";
-
-
-                    posisikameraklik = new CameraPosition.Builder().target(latlnglokasi)
+                    latpeta = itemKomoditas.getLatitude();
+                    longipeta = itemKomoditas.getLongitude();
+                    posisikameraklik = new CameraPosition.Builder()
+                            .target(markeradd.getPosition())
                             .zoom(16)
-                            .bearing(0).tilt(0).build();
+                            .bearing(0)
+                            .tilt(0)
+                            .build();
 
                     map.moveCamera(CameraUpdateFactory.newCameraPosition(posisikameraklik));
-
-                    markeradd = map.addMarker(markeropsi);
                     markerklik = markeradd;
-                } else {
-                    markeradd = map.addMarker(markeropsi);
                 }
-
-
-                hashmapListHarga.put(markeradd, lokitem);
+                hashmapListHarga.put(markeradd, itemKomoditas);
             }
 
+            displayInfo(mListKomoHargaKomparator.get(posisiklik));
             btnNavigasi.setVisibility(View.VISIBLE);
-
             markerklik.showInfoWindow();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -589,21 +530,14 @@ public class FragmentPetaHarga extends Fragment  {
     GoogleMap.OnMarkerClickListener listenermarker = new GoogleMap.OnMarkerClickListener() {
         @Override
         public boolean onMarkerClick(Marker marker) {
-
             marker.showInfoWindow();
-
             //tampilkan keterangan marker
             try {
                 displayInfo(hashmapListHarga.get(marker));
-
-                //task ambil geocoder
                 taskAmbilGeocoder(latpeta, longipeta);
-
                 btnNavigasi.setVisibility(View.VISIBLE);
-
             } catch (Exception ex) {
                 ex.printStackTrace();
-
                 btnNavigasi.setVisibility(View.GONE);
             }
 
@@ -616,16 +550,14 @@ public class FragmentPetaHarga extends Fragment  {
     View.OnClickListener listenerNavigasi = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
-            String kordinatpetakirim = init_latitudekomoditas + "," + init_longitudekomoditas;
-            String kordinatsaya = latitudesaya + "," + longitudesaya;
-            String alamatpeta = "http://maps.google.com/maps?saddr=" + kordinatsaya + "&daddr=" + kordinatpetakirim + "&mode=driving";
+            String kordinatpetakirim = latitudeKomoditas + "," + longitudeKomoditas;
+            String myCoordinate = myLatitude + "," + myLongitude;
+            String alamatpeta = "http://maps.google.com/maps?saddr=" + myCoordinate + "&daddr=" + kordinatpetakirim + "&mode=driving";
 
             Log.w("ALAMAT PETA BUKA", "" + alamatpeta);
             Toast.makeText(FragmentPetaHarga.this.getActivity(), "Membuka Google Maps", Toast.LENGTH_SHORT).show();
 
             try {
-
                 Intent intentpeta = new Intent(Intent.ACTION_VIEW);
                 intentpeta.setData(Uri.parse(alamatpeta));
                 intentpeta.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
@@ -633,7 +565,6 @@ public class FragmentPetaHarga extends Fragment  {
 
             } catch (Exception ex) {
                 ex.printStackTrace();
-
                 Intent intentpeta = new Intent(Intent.ACTION_VIEW);
                 intentpeta.setData(Uri.parse(alamatpeta));
                 FragmentPetaHarga.this.startActivity(intentpeta);
@@ -644,8 +575,8 @@ public class FragmentPetaHarga extends Fragment  {
 
     View.OnClickListener listenerTelepon = new View.OnClickListener() {
         public void onClick(View view) {
-            if (init_telponkomoditas.length() > 4) {
-                Intent in = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + init_telponkomoditas));
+            if (teleponKomoditas.length() > 4) {
+                Intent in = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + teleponKomoditas));
                 try {
                     startActivity(in);
                 } catch (android.content.ActivityNotFoundException ex) {
@@ -657,11 +588,11 @@ public class FragmentPetaHarga extends Fragment  {
 
     View.OnClickListener listenerSms = new View.OnClickListener() {
         public void onClick(View view) {
-            if (init_telponkomoditas.length() > 4) {
+            if (teleponKomoditas.length() > 4) {
                 Intent in = new Intent(Intent.ACTION_VIEW);
                 in.setType("vnd.android-dir/mms-sms");
-                in.putExtra("address", init_telponkomoditas);
-                in.putExtra("sms_body","#pantauharga.id");
+                in.putExtra("address", teleponKomoditas);
+                in.putExtra("sms_body", "#pantauharga.id");
                 try {
                     startActivity(in);
                 } catch (android.content.ActivityNotFoundException ex) {
@@ -674,16 +605,16 @@ public class FragmentPetaHarga extends Fragment  {
     View.OnClickListener listenerRating = new View.OnClickListener() {
 
         public void onClick(View view) {
-            if (init_telponkomoditas.length() > 4) {
+            if (teleponKomoditas.length() > 4) {
                 try {
                     Intent myintent = new Intent(getActivity(), Rating.class);
-                    myintent.putExtra("nama", init_namakomoditas);
-                    myintent.putExtra("alamat", alamatgabungan);
-                    myintent.putExtra("harga1", init_hargakomoditas);
-                    myintent.putExtra("telpon", init_telponkomoditas);
-                    myintent.putExtra("lat", init_latitudekomoditas);
-                    myintent.putExtra("lng", init_longitudekomoditas);
-                    myintent.putExtra("keterangan", init_keterangan);
+                    myintent.putExtra("nama", namaKomoditas);
+                    myintent.putExtra("alamat", alamatKomoditas);
+                    myintent.putExtra("harga1", hargaKomoditas);
+                    myintent.putExtra("telpon", teleponKomoditas);
+                    myintent.putExtra("lat", latitudeKomoditas);
+                    myintent.putExtra("lng", longitudeKomoditas);
+                    myintent.putExtra("keterangan", keteranganKomoditas);
                     startActivity(myintent);
                 } catch (android.content.ActivityNotFoundException ex) {
                     Toast.makeText(FragmentPetaHarga.this.getActivity(), "Rating error", Toast.LENGTH_SHORT).show();
@@ -694,6 +625,101 @@ public class FragmentPetaHarga extends Fragment  {
 
     };
 
+    View.OnClickListener listenerShare = new View.OnClickListener() {
+        public void onClick(View view) {
+            GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
+                Bitmap bitmap;
+
+                @Override
+                public void onSnapshotReady(Bitmap snapshot) {
+                    OutputStream fout = null;
+                    String gText = "#pantauharga.id";
+                    String filePath = System.currentTimeMillis() + ".jpeg";
+
+                    try {
+
+                        fout = getContext().openFileOutput(filePath,
+                                getContext().MODE_WORLD_READABLE);
+
+                        Bitmap bitmap = Bitmap.createBitmap(snapshot.getWidth(), snapshot.getHeight(), snapshot.getConfig());
+
+                        Canvas canvas = new Canvas(bitmap);
+                        canvas.drawBitmap(snapshot, 0, 0, null);
+
+                        Paint paint = new Paint();
+                        paint.setColor(Color.RED);
+                        //paint.setAlpha(2);
+                        paint.setTextSize(10);
+                        paint.setAntiAlias(true);
+                        paint.setUnderlineText(true);
+                        canvas.drawText(gText, 10, 10, paint);
+
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fout);
+                        fout.flush();
+                        fout.close();
+                    } catch (FileNotFoundException e) {
+                        Log.d("ImageCapture", "FileNotFoundException");
+                        Log.d("ImageCapture", e.getMessage());
+                        filePath = "";
+                    } catch (IOException e) {
+                        Log.d("ImageCapture", "IOException");
+                        Log.d("ImageCapture", e.getMessage());
+                        filePath = "";
+                    }
+
+                    openShareImageDialog(filePath);
+                }
+            };
+
+            map.snapshot(callback);
+
+        }
+
+    };
+
+    public void openShareImageDialog(String filePath) {
+        File file = getContext().getFileStreamPath(filePath);
+
+        if (!filePath.equals("")) {
+            final ContentValues values = new ContentValues(2);
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+            final Uri contentUriFile = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+            String type;
+            switch (typeKomoditas) {
+                case 1:
+                    type = "Jual ";
+                    break;
+                case 2:
+                    type = "Beli ";
+                    break;
+                default:
+                    type = "Pantau ";
+                    break;
+
+            }
+            String message = "";
+
+            message += type + namaKomoditas + '\n';
+            message += "Harga per Kg " + formatHargaKomoditas + '\n';
+            if(typeKomoditas == 1 || typeKomoditas == 2){
+                if(teleponKomoditas.length() > 8){
+                    message += "Hubungi " + teleponKomoditas + '\n';
+                }
+            }
+
+            message += "#pantauharga.id";
+            final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+            intent.setType("image/jpeg");
+            intent.putExtra(android.content.Intent.EXTRA_STREAM, contentUriFile);
+            intent.putExtra(Intent.EXTRA_TEXT, message);
+            startActivity(Intent.createChooser(intent, "Share Image"));
+        } else {
+            //This is a custom class I use to show dialogs...simply replace this with whatever you want to show an error message, Toast, etc.
+//            DialogUtilities.showOkDialogWithText(this, R.string.shareImageFailed);
+        }
+    }
 
     //AMBIL GEOCODER PENGGUNA
     private void ambilGeocoderPengguna(String latitude, String longitude) {
@@ -725,29 +751,29 @@ public class FragmentPetaHarga extends Fragment  {
                 } else {
                     gecoder_alamat = "";
                     gecoder_namakota = "";
-                    alamatgabungan = "";
+                    alamatKomoditas = "";
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             gecoder_alamat = "";
             gecoder_namakota = "";
-            alamatgabungan = "";
+            alamatKomoditas = "";
         }
 
         Log.w("NAMA KOTA", "NAMA KOTA " + gecoder_alamat + " " + gecoder_namakota);
 
         if (gecoder_namakota != null && gecoder_namakota.length() > 0) {
 
-            alamatgabungan = gecoder_namakota;
+            alamatKomoditas = gecoder_namakota;
 
             if (gecoder_alamat != null && gecoder_alamat.length() > 0) {
 
-                alamatgabungan = gecoder_alamat + ", " + gecoder_namakota;
+                alamatKomoditas = gecoder_alamat + ", " + gecoder_namakota;
 
             }
         } else {
-            alamatgabungan = "";
+            alamatKomoditas = "";
         }
 
     }
@@ -768,9 +794,9 @@ public class FragmentPetaHarga extends Fragment  {
             @Override
             public Object then(Task<Object> task) throws Exception {
 
-                if (alamatgabungan.length() > 4) {
-                    Log.w("ALAMAT GABUNGAN TASK", "ALAMAT " + alamatgabungan);
-                    teks_alamatkomoditas.setText(alamatgabungan);
+                if (alamatKomoditas.length() > 4) {
+                    Log.w("ALAMAT GABUNGAN TASK", "ALAMAT " + alamatKomoditas);
+                    teks_alamatkomoditas.setText(alamatKomoditas);
                     teks_alamatkomoditas.setVisibility(View.VISIBLE);
                 } else {
                     teks_alamatkomoditas.setText("-");

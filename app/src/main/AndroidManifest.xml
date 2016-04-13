@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="id.pantauharga.android"
     android:installLocation="auto"
-    android:versionCode="10"
-    android:versionName="1.1.7">
+    android:versionCode="11"
+    android:versionName="1.1.8">
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -164,6 +164,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB3QJMaUF6xKYlX7xNicslomu_lktQrnIc" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
     </application>
-
 </manifest>
