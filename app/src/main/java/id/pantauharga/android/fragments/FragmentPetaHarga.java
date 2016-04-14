@@ -3,8 +3,10 @@ package id.pantauharga.android.fragments;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
@@ -106,7 +108,8 @@ public class FragmentPetaHarga extends Fragment {
     private double myLatitude = 0;
     private double myLongitude = 0;
     private boolean isMapSiap = false;
-    private SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyy HH:mm");
+    private SimpleDateFormat formatDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
     //DAFTAR HARGA KOMODITAS
 
     private List<HargaKomoditasItem> mListKomoditasHarga;
@@ -251,7 +254,7 @@ public class FragmentPetaHarga extends Fragment {
             teks_rate.setText("Rating User : -");
             teks_rate.setVisibility(View.GONE);
         }
-        teks_lastupdate.setText("Last Updated : " + formatDate.format(lastUpdatedKomoditas));
+        teks_lastupdate.setText("Last Updated : " + formatDateTime.format(lastUpdatedKomoditas));
     }
 
 
@@ -628,7 +631,6 @@ public class FragmentPetaHarga extends Fragment {
     View.OnClickListener listenerShare = new View.OnClickListener() {
         public void onClick(View view) {
             GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
-                Bitmap bitmap;
 
                 @Override
                 public void onSnapshotReady(Bitmap snapshot) {
@@ -641,18 +643,7 @@ public class FragmentPetaHarga extends Fragment {
                         fout = getContext().openFileOutput(filePath,
                                 getContext().MODE_WORLD_READABLE);
 
-                        Bitmap bitmap = Bitmap.createBitmap(snapshot.getWidth(), snapshot.getHeight(), snapshot.getConfig());
-
-                        Canvas canvas = new Canvas(bitmap);
-                        canvas.drawBitmap(snapshot, 0, 0, null);
-
-                        Paint paint = new Paint();
-                        paint.setColor(Color.RED);
-                        //paint.setAlpha(2);
-                        paint.setTextSize(10);
-                        paint.setAntiAlias(true);
-                        paint.setUnderlineText(true);
-                        canvas.drawText(gText, 10, 10, paint);
+                        Bitmap bitmap = mark(snapshot);
 
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fout);
                         fout.flush();
@@ -697,14 +688,13 @@ public class FragmentPetaHarga extends Fragment {
                 default:
                     type = "Pantau ";
                     break;
-
             }
             String message = "";
 
             message += type + namaKomoditas + '\n';
             message += "Harga per Kg " + formatHargaKomoditas + '\n';
-            if(typeKomoditas == 1 || typeKomoditas == 2){
-                if(teleponKomoditas.length() > 8){
+            if (typeKomoditas == 1 || typeKomoditas == 2) {
+                if (teleponKomoditas.length() > 8) {
                     message += "Hubungi " + teleponKomoditas + '\n';
                 }
             }
@@ -719,6 +709,59 @@ public class FragmentPetaHarga extends Fragment {
             //This is a custom class I use to show dialogs...simply replace this with whatever you want to show an error message, Toast, etc.
 //            DialogUtilities.showOkDialogWithText(this, R.string.shareImageFailed);
         }
+    }
+
+    public Bitmap mark(Bitmap src) {
+        int w = src.getWidth();
+        int h = src.getHeight();
+
+        Log.w("Bitmap", "Ukuran w x h : " + w + " x " + h);
+        Paint bgPaint = new Paint();
+        bgPaint.setColor(Color.parseColor(("#AA000000")));
+
+        Bitmap result = Bitmap.createBitmap(w, h, src.getConfig());
+        Canvas canvas = new Canvas(result);
+        canvas.drawBitmap(src, 0, 0, null);
+        Paint paint = new Paint();
+        paint.setTextSize(50);
+        paint.setAntiAlias(true);
+        paint.setUnderlineText(false);
+
+        //should draw background first,order is important
+        int left = 1;
+        int right = w - 1;
+        int bottom = h - 1;
+        int top = bottom - (h / 2);
+        canvas.drawRect(left, top, right, bottom, bgPaint);
+        Log.w("Bitmap", "Ukuran left, right, bottom, top : " + left + ", " + right + ", " + bottom + ", " + top);
+
+        String type;
+        switch (typeKomoditas) {
+            case 1:
+                type = "Jual ";
+                break;
+            case 2:
+                type = "Beli ";
+                break;
+            default:
+                type = "Pantau ";
+                break;
+
+        }
+
+        paint.setColor(Color.RED);
+        canvas.drawText(type + namaKomoditas, 20, top + 100, paint);
+        paint.setColor(Color.WHITE);
+        canvas.drawText("Harga per Kg " + formatHargaKomoditas, 20, top + 160, paint);
+        if (typeKomoditas == 1 || typeKomoditas == 2) {
+            if (teleponKomoditas.length() > 8) {
+                canvas.drawText("Hubungi " + teleponKomoditas, 20, top + 220, paint);
+            }
+        }
+
+        canvas.drawText("Date " + formatDate.format(lastUpdatedKomoditas), 20, top + 280, paint);
+        canvas.drawText("#pantauharga.id", 20, top + 350, paint);
+        return result;
     }
 
     //AMBIL GEOCODER PENGGUNA

@@ -2,15 +2,23 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        pantauharga {
+            keyAlias 'pantauharga'
+            keyPassword 'pantauharga'
+            storeFile file('/Users/widodo/PantauHarga/PantauHargaAndroid/pantauharga.jks')
+            storePassword 'pantauharga'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
     defaultConfig {
         applicationId "id.pantauharga.android"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 11
         versionName "1.1.8"
+        signingConfig signingConfigs.pantauharga
     }
     buildTypes {
         release {
@@ -35,6 +43,8 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+    productFlavors {
     }
 }
 
